@@ -6,12 +6,6 @@ import { Tabs, Tab } from '@material-ui/core'
 import TabPanel from '../../component/TabPanel';
 import { Close } from '@material-ui/icons';
 
-/*
-  DROPDOWN_SINGLE: 'dropdown.single',
-  DROPDOWN_MULTIPLE: 'dropdown.multiple',
-  BOOL: 'bool',
-  DATE: 'date'
-*/
 const Type = PatientDataStructure.Type
 const Validation = PatientDataStructure.Validation
 
@@ -131,14 +125,14 @@ function PatientInfo(props){
                     setPatientInfo({...patientInfo})
                   }} /> : null}
                   {type === Type.DATE ? <Box className="itm-line">
-                    <Box className="itm-label">{label}</Box><TextField type="date" name={name} required={required} value={value === undefined ? '' : value}
+                    <Box className="itm-label">{label} {required===true? "*" : null}</Box><TextField type="date" name={name} required={required} value={value === undefined ? '' : value}
                   fullWidth={true}  
                   onChange={(e) => {
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
                     setPatientInfo({...patientInfo})
                   }} /></Box> : null}
                   {type === Type.DROPDOWN_SINGLE ? <Box className="itm-line">
-                    <Box className="itm-label">{label}</Box>
+                    <Box className="itm-label">{label} {required===true? "*" : null}</Box>
                     <Select type="date" name={name} required={required} value={value === undefined ? '' : value}
                   label={label} fullWidth={true}  
                   onChange={(e) => {
@@ -162,12 +156,13 @@ function PatientInfo(props){
           if(missingLabels === true){
             props.history.push({
               pathname: '/sang-loc',
-              patientInfo
+              patientInfo,
+              initFrmData: props.location.initFrmData
             })
           }else {
             setValidationString('Các trường sau thiếu thông tin: '+missingLabels.join(', '))
           }
-        }}>Bắt đầu sàng lọc</Button>
+        }}>{props.location.initFrmData === undefined? "Bắt đầu sàng lọc" : "Tiếp tục"}</Button>
       </Box>
       <Snackbar
         anchorOrigin={{

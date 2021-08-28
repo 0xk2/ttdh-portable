@@ -21,7 +21,8 @@ const FormData = (props) => {
                 onClick={() => {
                 props.history.push({
                 pathname: '/',
-                patientInfo: props.location.patientInfo
+                patientInfo: props.location.patientInfo,
+                initFrmData
               })
             }}
           >Thông tin</Button>

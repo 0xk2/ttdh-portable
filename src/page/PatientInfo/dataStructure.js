@@ -38,17 +38,24 @@ const frmdata = {
           validation: Validation.RECOMMENDED,
           dataSource: 'local.gender'
         },
-        'testCode': {
-          label: 'Mã xét nghiệm',
-          name: 'testCode',
-          type: Type.TEXT,
-          validation: Validation.RECOMMENDED
-        },
         'phone': {
           label: 'Số điện thoại',
           name: 'phone',
           type: Type.PHONE,
           validation: Validation.REQUIRED
+        },
+        'covidStatus': {
+          label: 'Tình trạng nhiễm covid',
+          name: 'covidStatus',
+          type: Type.DROPDOWN_SINGLE,
+          validation: Validation.REQUIRED,
+          dataSource: 'local.covid_status'
+        },
+        'lastPostiveTestDate': {
+          label: 'Lần xét nghiệm DƯƠNG TÍNH gần nhất',
+          name: 'lastPostiveTestDate',
+          type: Type.DATE,
+          validation: Validation.RECOMMENDED
         },
         'provinceCode': {
           label: 'Tỉnh',
@@ -80,10 +87,16 @@ const frmdata = {
       }
     },
     'test_info':{
-      title: 'Xét nghiệm',
+      title: 'Xét nghiệm gần nhất',
       inputs: {
+        'testCode': {
+          label: 'Mã xét nghiệm gần nhất',
+          name: 'testCode',
+          type: Type.TEXT,
+          validation: Validation.RECOMMENDED
+        },
         'testDate': {
-          label: 'Ngày lấy mẫu',
+          label: 'Ngày xét nghiệm gần nhất',
           name: 'testDate',
           type: Type.DATE,
           validation: Validation.RECOMMENDED
@@ -105,12 +118,6 @@ const frmdata = {
           label: 'Mức CT',
           name: 'ctLevel',
           type: Type.TEXT,
-          validation: Validation.RECOMMENDED
-        },
-        'hasBeenInHospital': {
-          label: 'Đã đi Bệnh Viện/Khu cách ly?',
-          name: 'hasBeenInHospital',
-          type: Type.BOOL,
           validation: Validation.RECOMMENDED
         },
         'getOutOfHospitalDate': {

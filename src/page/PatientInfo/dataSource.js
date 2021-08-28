@@ -7,6 +7,17 @@ const dataSource = {
       'name': 'Nữ'
     }
   },
+  'local.covid_status': {
+    'Dương tính': {
+      'name': 'Có, đang dương tính'
+    },
+    'Chưa từng nhiễm': {
+      'name': 'Chưa nhiễm bao giờ'
+    },
+    'Nhiễm và đã khỏi': {
+      'name': 'Đã nhiễm và đã khỏi'
+    }
+  },
   'local.vn_province': {
     "79": {
       "name": "Hồ Chí Minh",
