@@ -1,4 +1,4 @@
-export default {
+const dataSource = {
   'local.gender': {
     'Male': {
       'name': 'Nam'
@@ -335,3 +335,5 @@ export default {
   },
   'local.vn_ward': {}
 }
+
+export default dataSource;

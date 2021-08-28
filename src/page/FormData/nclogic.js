@@ -289,6 +289,7 @@ const calc = function(frmdata){
   sections[0].questions.map((question, idx) => {  
     question.options.map((option, oidx) => {
       trieu_chung += option.base * option.value
+      return 0;
     })
     return 0;
   })

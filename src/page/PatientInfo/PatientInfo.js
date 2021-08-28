@@ -1,5 +1,4 @@
 import {Container, TextField, Box, Select, MenuItem, Button, Snackbar, IconButton} from '@material-ui/core';
-import {Fragment} from 'react';
 import PatientDataStructure from './dataStructure';
 import DataSource from './dataSource';
 import {useState} from 'react';
@@ -30,7 +29,9 @@ function PatientInfo(props){
         if(_input.validation === Validation.REQUIRED && _input.value === undefined){
           missingLabels.push(_input.label)
         }
+        return 0
       })
+      return 0
     })
     if(missingLabels.length === 0) {return true}
     else {return missingLabels}
@@ -78,19 +79,22 @@ function PatientInfo(props){
                       const _inputs = _section.inputs
                       Object.keys(_inputs).map((input_id, idx) => {
                         const _input = _inputs[input_id]
-                        console.log(_input)
                         if(parent_code === input_id){
                           Object.keys(dataSource).map((value, didx) => {
                             if(dataSource[value].parent_code === _input.value){
                               items.push({value, label: dataSource[value].name});
                             }
+                            return 0
                           })      
                         }
+                        return 0
                       })
+                      return 0
                     })
                   }else{
                     Object.keys(dataSource).map((value, didx) => {
                       items.push({value, label: dataSource[value].name});
+                      return 0
                     })
                   }
                 }
@@ -176,6 +180,11 @@ function PatientInfo(props){
           setValidationString('')
         }}
         message={failValidationString}
+        action={<IconButton size="small" aria-label="close" color="inherit" onClick={() => {
+          setValidationString('')
+        }}>
+          <Close fontSize="small" />
+        </IconButton>}
       />
     </Container>
   )

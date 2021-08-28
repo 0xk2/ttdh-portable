@@ -136,9 +136,9 @@ const frmdata = {
           type: Type.PHONE,
           validation: Validation.RECOMMENDED
         },
-        'fieldDoctorPhone': {
+        'note': {
           label: 'Ghi chú',
-          name: 'fieldDoctorPhone',
+          name: 'note',
           type: Type.TEXT_LONG,
           validation: Validation.OPTIONAL
         }
@@ -147,6 +147,8 @@ const frmdata = {
   }
 }
 
-export default {
+const dataStructure = {
   Validation, Type, frmdata
 }
+
+export default dataStructure;

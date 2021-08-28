@@ -2,7 +2,7 @@ import {Container, Button, Box} from '@material-ui/core';
 import { Tabs, Tab } from '@material-ui/core'
 import classnames from 'classnames';
 import {useState} from 'react';
-import { ChevronLeft, NavigateNext, Save, Edit } from '@material-ui/icons';
+import { Save, Edit } from '@material-ui/icons';
 import { CheckCircle, LocalHospital } from '@material-ui/icons';
 import TabPanel from '../component/TabPanel';
 import { Redirect } from 'react-router';
