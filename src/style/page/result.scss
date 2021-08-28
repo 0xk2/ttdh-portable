@@ -1,0 +1,32 @@
+.result-page{
+  .title {
+    font-size: 30px;
+  }
+  .annoucement {
+    padding: 30px 30px 15px 30px;
+  }
+  .empty-result{
+    text-align: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  .nc-result{
+    padding-bottom: 16px;
+  }
+  .tab-pane{
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  .text-heading-icon{
+    vertical-align: bottom;
+  }
+  .control {
+    margin-top: 10px;
+    text-align: left;
+    button {
+      &:nth-of-type(2) {
+        margin-left: 10px;
+      }
+    }
+  }
+}
