@@ -284,30 +284,36 @@ const nextstep = {
 }
 
 const calc = function(frmdata){
-  var trieu_chung = 0, tang_nang = 0, nguy_hiem = 0;
+  var s1 = 0, s2 = 0, s3 = 0;
+  var tang_nang = 0, nguy_hiem = 0;
   var sections = frmdata.sections;
   sections[0].questions.map((question, idx) => {  
     question.options.map((option, oidx) => {
-      trieu_chung += option.base * option.value
+      s1 += option.base * option.value
       return 0;
     })
     return 0;
   })
   sections[1].questions.map((question, idx) => {
     question.options.map((option, oidx) => {
-      tang_nang += option.base * option.value
+      s2 += option.base * option.value
       return 0;
     })
     return 0;
   })
   sections[2].questions.map((question, idx) => {
     question.options.map((option, oidx) => {
-      nguy_hiem += option.base * option.value
+      s3 += option.base * option.value
+      if(idx === 0){
+        tang_nang += option.base * option.value
+      }else{
+        nguy_hiem += option.base * option.value
+      }
       return 0;
     })
     return 0;
   })
-  var total = trieu_chung + tang_nang + nguy_hiem
+  var total = s1 + s2 + s3
   if(nguy_hiem > 0 || total > 30){
     return nextstep.NC4
   } else if (tang_nang >= 8 || total >= 23){
