@@ -4,40 +4,18 @@ import classnames from 'classnames';
 import {useState} from 'react';
 import { ChevronLeft, NavigateNext, Save, Edit } from '@material-ui/icons';
 import { CheckCircle, LocalHospital } from '@material-ui/icons';
-
-const TabPanel = (props) => {
-  const {value, index, children} = props;
-  return <Box hidden={value !== index} className="tab-pane">
-    {children}
-  </Box>
-}
+import TabPanel from '../component/TabPanel';
+import { Redirect } from 'react-router';
 
 const Result = (props) => {
   return (
     <Container maxWidth="md" className="frm-container result-page">
       {
-        props.location.data === undefined ? 
-        <EmptyResultPage {...props}/> :
-        <NCResult {...props} data={props.location.data} originalFrm={props.location.originalFrm} />
+        props.location.data === undefined || props.location.patientInfo === undefined ? 
+        <Redirect pathname="/" /> :
+        <NCResult {...props} data={props.location.data} originalFrm={props.location.originalFrm} patientInfo={props.location.patientInfo} />
       }
     </Container>
-  )
-}
-
-const EmptyResultPage = (props) => {
-  return (
-    <Box className="empty-result">
-      <Box className="title">
-        Không có kết quả!
-      </Box>
-      <Button color="secondary" startIcon={<ChevronLeft />}
-          onClick={() => {
-          props.history.push({
-          pathname: '/'
-        })
-      }}
-      >quay về trang điền form</Button>
-    </Box>
   )
 }
 
@@ -48,34 +26,26 @@ const NCResult = (props) => {
   const [selectedTabIdx, setTab] = useState(0)
   return (
     <Box className="nc-result">
-      <Box className="pt16">
+      <Box className="pt16 control">
         <Button color="primary" variant='outlined' startIcon={<Edit />}
               onClick={() => {
               props.history.push({
-              pathname: '/',
-              initFrmData: props.originalFrm
+              pathname: '/sang-loc',
+              initFrmData: props.originalFrm,
+              patientInfo: props.patientInfo
             })
           }}
-        >Sửa form</Button>
+        >Sàng lọc</Button>
+        <Button color="secondary" variant='outlined' endIcon={<Save />}
+            onClick={() => {
+            props.history.push({
+            pathname: '/'
+          })
+        }}
+        >Tiếp theo</Button>
       </Box>
       <Box className={classnames("title","annoucement")} color={color}>
         <Box>{data.title}</Box>
-        <Box className="control">
-          <Button color="primary" variant='contained' startIcon={<Save />}
-                onClick={() => {
-                props.history.push({
-                pathname: '/'
-              })
-            }}
-          >Lưu lại</Button>
-          <Button color="secondary" variant='outlined' endIcon={<NavigateNext />}
-              onClick={() => {
-              props.history.push({
-              pathname: '/'
-            })
-          }}
-          >Không lưu</Button>
-        </Box>
       </Box>
       <Tabs
         value={selectedTabIdx}
@@ -93,7 +63,7 @@ const NCResult = (props) => {
           Array.isArray(data.action) === true ?
           data.action.map((act, idx) => {
             return (
-              <div key={idx} className="mt4">
+              <div key={idx} className="mt8">
                 <LocalHospital color={tabIndicatorColor} fontSize="small" className="text-heading-icon" /> <span>{act}</span>
               </div>
             )
@@ -105,7 +75,7 @@ const NCResult = (props) => {
           Array.isArray(data.consults) === true ?
           data.consults.map((consult, idx) => {
             return (
-              <div key={idx} className="mt4">
+              <div key={idx} className="mt8">
                 <CheckCircle color={tabIndicatorColor} fontSize="small" className="text-heading-icon" /> <span>{consult}</span>
               </div>
             )

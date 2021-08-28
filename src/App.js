@@ -9,13 +9,15 @@ import FormData from './page/FormData/FormData';
 import Dashboard from './page/Dashboard';
 import Auth from './page/Auth';
 import Result from './page/Result';
+import PatientInfo from './page/PatientInfo/PatientInfo';
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/" render={(props) => <FormData {...props} />} exact />
-        <Route path="/result" render={(props) => <Result {...props} />} />
+        <Route path="/" render={(props) => <PatientInfo {...props} />} exact />
+        <Route path="/sang-loc" render={(props) => <FormData {...props} />} exact />
+        <Route path="/ket-qua" render={(props) => <Result {...props} />} />
         <Route path="/auth">
           <Auth />
         </Route>

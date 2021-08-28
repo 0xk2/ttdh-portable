@@ -1,10 +1,10 @@
 export default {
   'local.gender': {
     'Male': {
-      'label': 'Nam'
+      'name': 'Nam'
     },
     'Female': {
-      'label': 'Nữ'
+      'name': 'Nữ'
     }
   },
   'local.vn_province': {
@@ -324,6 +324,14 @@ export default {
       "code": "726",
       "parent_code": "74"
     },
+  },
+  'local.testReason': {
+    '0': {
+      'name': 'Sàng lọc diện rộng'
+    },
+    '1': {
+      'name': 'Truy vết F0'
+    }
   },
   'local.vn_ward': {}
 }

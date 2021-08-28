@@ -3,20 +3,35 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import NCLogic from './nclogic';
 import React from 'react';
+import { Edit } from '@material-ui/icons';
+import { Redirect } from 'react-router';
 const AlphabetBullet = ['A','B','C','D']
 
 const FormData = (props) => {
   const initFrmData = props.location.initFrmData !== undefined ? props.location.initFrmData : NCLogic.getFrmdata()
   const [frmdata, setState] = React.useState(initFrmData)
+  if(props.location.patientInfo === undefined){
+    return <Redirect to="/" />
+  }
   return (
     <div>
       <Container maxWidth="md" className="frm-container">
+        <Box className="pt16">
+          <Button color="primary" variant='outlined' startIcon={<Edit />}
+                onClick={() => {
+                props.history.push({
+                pathname: '/',
+                patientInfo: props.location.patientInfo
+              })
+            }}
+          >Thông tin</Button>
+        </Box>
         <div className="form-desc">
           <div className="col-logo">
             <img src="/logo_84.jpg" alt="Logo"/>
           </div>
           <div className="col-text">
-            <div className="title">Form sàng lọc nguy cơ Covid 19</div>
+            <div className="title">Sàng lọc nguy cơ Covid 19</div>
             <div className="subtitle">Form này dành cho <b>nhân viên y tế</b>. <br/>Xin vui lòng liên hệ <a href="https://thaythuocdonghanh.vn">Thầy Thuốc Đồng Hành</a> để được đào tạo</div>
           </div>
         </div>
@@ -57,10 +72,11 @@ const FormData = (props) => {
           <Button variant="contained" color="primary" onClick={function(){
             const result = NCLogic.calc(frmdata)
             props.history.push({
-              pathname: "/result",
+              pathname: "/ket-qua",
               search: "",
               data: result,
-              originalFrm: frmdata
+              originalFrm: frmdata,
+              patientInfo: props.location.patientInfo
             });
           }}>
             Tính kết quả

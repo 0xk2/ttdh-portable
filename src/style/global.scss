@@ -19,6 +19,14 @@
   line-height: 120%;
 }
 
+.itm-line{
+  margin-top: 16px;
+  padding-bottom:8px;
+  .itm-label {
+    color:rgba(133, 133, 133,1);
+  }
+}
+
 .footer {
   padding: 16px;
   text-align: center;

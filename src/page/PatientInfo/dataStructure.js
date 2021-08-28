@@ -17,7 +17,7 @@ const Type = {
 const frmdata = {
   sections: {
     'basic_info': {
-      title: 'Thông tin cơ bản',
+      title: 'Cơ bản',
       inputs: {
         'name' : {
           label: 'Họ và tên',
@@ -51,7 +51,7 @@ const frmdata = {
           validation: Validation.REQUIRED
         },
         'provinceCode': {
-          label: 'Tỉnh thành',
+          label: 'Tỉnh',
           name: 'provinceCode',
           type: Type.DROPDOWN_SINGLE,
           validation: Validation.REQUIRED,
@@ -63,7 +63,7 @@ const frmdata = {
           type: Type.DROPDOWN_SINGLE,
           validation: Validation.REQUIRED,
           dataSource: 'local.vn_district',
-          parent: 'provinceCode'
+          parent_code: 'provinceCode'
         },
         'wardCode': {
           label: 'Mã phường/Xã',
@@ -75,13 +75,12 @@ const frmdata = {
           label: 'Số nhà',
           name: 'address',
           type: Type.TEXT,
-          validation: Validation.OPTIONAL,
-          dataSource: 'local.vn_ward'
+          validation: Validation.OPTIONAL
         }
       }
     },
     'test_info':{
-      title: 'Thông tin xét nghiệm',
+      title: 'Xét nghiệm',
       inputs: {
         'testDate': {
           label: 'Ngày lấy mẫu',
@@ -93,7 +92,8 @@ const frmdata = {
           label: 'Lý do xét nghiệm',
           name: 'testReason',
           type: Type.DROPDOWN_SINGLE,
-          validation: Validation.RECOMMENDED
+          validation: Validation.RECOMMENDED,
+          dataSource: 'local.testReason'
         },
         'ctValue': {
           label: 'CT Value',

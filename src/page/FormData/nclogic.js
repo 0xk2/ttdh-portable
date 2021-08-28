@@ -3,83 +3,7 @@ const frmdata =
   sections :
   [
     {
-      title: 'CÂU HỎI SÀNG LỌC',
-      subtitle: 'Trong 24h vừa qua, bác/anh/chị có các triệu chứng/dấu hiệu nào sau đây không?',
-      questions: [
-        {
-          title: 'Các triệu chứng nặng',
-          options: [
-            {
-              title: 'Các triệu chứng thường gặp (khởi phát) nặng lên liên tục không đỡ',
-              base: 4,
-              value: 0
-            },
-            {
-              title: 'Sốt cao từ 39 độ C không đáp ứng với thuốc hạ sốt (sốt trở lại trong vòng 02h sau dùng thuốc)',
-              base: 4,
-              value: 0
-            },
-            {
-              title: 'Khó thở không thể làm việc được phải nghỉ ngơi',
-              base: 4,
-              value: 0
-            },
-            {
-              title: 'Mệt mỏi, sinh hoạt khó khăn',
-              base: 4,
-              value: 0
-            },
-            {
-              title: 'Huyết áp tăng cao từ 160/100 mmHg không đáp ứng với thuốc thường dùng',
-              base: 4,
-              value: 0
-            }
-          ],
-        },
-        {
-          title: 'Các triệu chứng/dấu hiệu nghiêm trọng (biến chứng/toàn phát)',
-          options: [
-            {
-              title: 'Đo huyết áp 2 lần có giá trị trung bình dưới 85/55 mmHg',
-              base: 6,
-              value: 0
-            },
-            {
-              title: 'Nhịp tim tăng cao trên 120 lần/phút hoặc xuống dưới 50 lần/phút, hoặc nhịp thở từ 25 lần/phút',
-              base: 6,
-              value: 0
-            },
-            {
-              title: 'Khó thở nhiều không thể nằm để thở',
-              base: 6,
-              value: 0
-            },
-            {
-              title: 'Đau tức ngực thành cơn kéo dài từ 5’',
-              base: 6,
-              value: 0
-            },
-            {
-              title: 'Mất khả năng nói hoặc cử động',
-              base: 6,
-              value: 0
-            },
-            {
-              title: 'Lơ mơ, không tỉnh táo',
-              base: 6,
-              value: 0
-            },
-            {
-              title: 'Sp02 < 95% khi nghỉ hoặc tụt Sp02 xuống < 95% sau gắng sức (nếu có thiết bị đo Sp02 tại nhà)',
-              base: 6,
-              value: 0
-            },
-          ]
-        },
-      ]
-    },
-    {
-      title: 'CÂU HỎI TƯ VẤN (nếu không có tình trạng nghiêm trọng/nặng)',
+      title: 'Các câu hỏi về bệnh',
       subtitle: 'Kể từ khi xác định bị nhiễm hoặc có nguy cơ nhiễm CoViD-19, bác/anh/chị có các triệu chứng nào sau đây không?',
       questions: [
         {
@@ -116,7 +40,7 @@ const frmdata =
               value: 0
             },
             {
-              title: 'Ho khan, đau họng',
+              title: 'Ho khan',
               base: 1,
               value: 0
             },
@@ -131,7 +55,7 @@ const frmdata =
               value: 0
             },
             {
-              title: 'Khó thở nhẹ',
+              title: 'Đau họng',
               base: 1,
               value: 0
             },
@@ -183,6 +107,82 @@ const frmdata =
             }
           ]
         }
+      ]
+    },
+    {
+      title: 'CÂU HỎI SÀNG LỌC',
+      subtitle: 'Trong 24h vừa qua, bác/anh/chị có các triệu chứng/dấu hiệu nào sau đây không?',
+      questions: [
+        {
+          title: 'Các triệu chứng nặng',
+          options: [
+            {
+              title: 'Các triệu chứng thường gặp (khởi phát) nặng lên liên tục không đỡ (VD: ho kéo dài thành tràng không dứt, ho xong phải thở dốc)',
+              base: 4,
+              value: 0
+            },
+            {
+              title: 'Sốt cao từ 39 độ C không đáp ứng với thuốc hạ sốt (sốt trở lại trong vòng 02h sau dùng thuốc)',
+              base: 4,
+              value: 0
+            },
+            {
+              title: 'Khó thở không thể làm việc được phải nghỉ ngơi',
+              base: 4,
+              value: 0
+            },
+            {
+              title: 'Mệt mỏi, sinh hoạt khó khăn',
+              base: 4,
+              value: 0
+            },
+            {
+              title: 'Huyết áp tăng cao từ 160/100 mmHg không đáp ứng với thuốc thường dùng',
+              base: 4,
+              value: 0
+            }
+          ],
+        },
+        {
+          title: 'Các triệu chứng/dấu hiệu nghiêm trọng (biến chứng/toàn phát)',
+          options: [
+            {
+              title: 'Đo huyết áp 2 lần có giá trị trung bình dưới 85/55 mmHg',
+              base: 6,
+              value: 0
+            },
+            {
+              title: 'Nhịp tim tăng cao trên 120 lần/phút hoặc xuống dưới 50 lần/phút, hoặc nhịp thở từ 21 lần/phút với người lớn, từ 30 lần/phút với trẻ em',
+              base: 6,
+              value: 0
+            },
+            {
+              title: 'Khó thở nhiều không thể nằm để thở',
+              base: 6,
+              value: 0
+            },
+            {
+              title: 'Đau tức ngực thành cơn kéo dài từ 5’',
+              base: 6,
+              value: 0
+            },
+            {
+              title: 'Mất khả năng nói hoặc cử động',
+              base: 6,
+              value: 0
+            },
+            {
+              title: 'Lơ mơ, không tỉnh táo',
+              base: 6,
+              value: 0
+            },
+            {
+              title: 'Sp02 < 90% khi nghỉ hoặc tụt Sp02 xuống < 90% sau gắng sức (nếu có thiết bị đo Sp02 tại nhà) dù đang thở Oxy, hoặc Sp02 < 94% không cải thiện khi thở Oxy tại nhà.',
+              base: 6,
+              value: 0
+            },
+          ]
+        },
       ]
     }
   ]
@@ -284,46 +284,38 @@ const nextstep = {
 }
 
 const calc = function(frmdata){
-  var s1 = 0, s2 = 0, s3 = 0;
-  var q1 = 0, q2 = 0;
+  var trieu_chung = 0, tang_nang = 0, nguy_hiem = 0;
   var sections = frmdata.sections;
   sections[0].questions.map((question, idx) => {  
     question.options.map((option, oidx) => {
-      s1 += option.base * option.value
-      if(idx === 0){
-        q1 += option.base * option.value
-      } else if (idx ===1 ){
-        q2 += option.base * option.value
-      }
-      return 0;
+      trieu_chung += option.base * option.value
     })
     return 0;
   })
   sections[1].questions.map((question, idx) => {
     question.options.map((option, oidx) => {
-      s2 += option.base * option.value
+      tang_nang += option.base * option.value
       return 0;
     })
     return 0;
   })
   sections[2].questions.map((question, idx) => {
     question.options.map((option, oidx) => {
-      s3 += option.base * option.value
+      nguy_hiem += option.base * option.value
       return 0;
     })
     return 0;
   })
-  var total = s1 + s2 + s3
-  console.log(q1, q2, total)
-  if(q2 >= 12 || total > 30){
+  var total = trieu_chung + tang_nang + nguy_hiem
+  if(nguy_hiem > 0 || total > 30){
     return nextstep.NC4
-  } else if (q1 >= 8 || total >= 22){
+  } else if (tang_nang >= 8 || total >= 23){
     return nextstep.NC3
-  } else if (total >= 14 || q1 >= 4){
+  } else if (total >= 15 || tang_nang >= 4){
     return nextstep.NC2
-  } else if (total >= 6 || q1 === 0 || q2 === 0){
+  } else if (total >= 7){
     return nextstep.NC1
-  } else if (total <= 6 || q1 === 0) {
+  } else if (total <= 6) {
     return nextstep.NC0
   }
   return nextstep.exception
