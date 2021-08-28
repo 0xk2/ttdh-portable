@@ -72,17 +72,11 @@ const frmdata = {
           dataSource: 'local.vn_district',
           parent_code: 'provinceCode'
         },
-        'wardCode': {
-          label: 'Mã phường/Xã',
-          name: 'wardCode',
-          type: Type.TEXT,
-          validation: Validation.REQUIRED
-        },
         'address': {
-          label: 'Số nhà',
+          label: 'Phường xã, đường, số nhà',
           name: 'address',
           type: Type.TEXT,
-          validation: Validation.OPTIONAL
+          validation: Validation.RECOMMENDED
         }
       }
     },

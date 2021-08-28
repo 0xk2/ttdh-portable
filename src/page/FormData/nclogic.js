@@ -211,7 +211,7 @@ const nextstep = {
       'Trường hợp của (Bác) sẽ vào BV thu dung, hiện tại có thể rất động BN, vì đây là nơi dành cho BN nhẹ, như trường hợp cùa Bác. Sẽ không thoải mái như tự chăm sóc ở nhà. Nên Bác cố gắng nha',
       'Tuy nhiên, khi có các dấu hiệu khó thở, mệt hơn, đau ngực, lạnh đầu ngón tay chân,…. cần liên hệ với số 18001119 hoặc 1022 hoặc với số điện thoại đang gọi đến (bác/anh/chị) để được hỗ trợ kịp thời'
     ],
-    action: 'Gọi 18001119 để được tạo hồ sơ; sẽ có bác sỹ gọi thăm khám hàng ngày',
+    action: 'Tư vấn và thông báo sẽ có nhân viên y tế gọi lại sau',
   },
   NC1: {
     type: 'nc1',
@@ -230,7 +230,7 @@ const nextstep = {
       'Trường hợp của (Bác) sẽ vào BV thu dung, hiện tại có thể rất động BN, vì đây là nơi dành cho BN nhẹ, như trường hợp cùa Bác. Sẽ không thoải mái như tự chăm sóc ở nhà. Nên Bác cố gắng nha',
       'Tuy nhiên, khi có các dấu hiệu khó thở, mệt hơn, đau ngực, lạnh đầu ngón tay chân,…. cần liên hệ với số 18001119 hoặc 1022 hoặc với số điện thoại đang gọi đến (bác/anh/chị) để được hỗ trợ kịp thời'
     ],
-    action: 'Gọi 18001119 để được tạo hồ sơ; sẽ có bác sỹ gọi thăm khám hàng ngày',
+    action: 'Tư vấn và thông báo sẽ có nhân viên y tế gọi lại sau',
   },
   NC2: {
     type: 'nc2',
@@ -251,7 +251,8 @@ const nextstep = {
       'Trường hợp của (Bác) sẽ vào BV thu dung, hiện tại có thể rất động BN, vì đây là nơi dành cho BN nhẹ, như trường hợp cùa Bác. Sẽ không thoải mái như tự chăm sóc ở nhà. Nên Bác cố gắng nha',
       'Tuy nhiên, khi có các dấu hiệu khó thở, mệt hơn, đau ngực, lạnh đầu ngón tay chân,…. cần liên hệ với số 18001119 hoặc 1022 hoặc với số điện thoại đang gọi đến (bác/anh/chị) để được hỗ trợ kịp thời'
     ],
-    action: ['Gọi 18001119 để được tạo hồ sơ; sẽ có bác sỹ gọi thăm khám 2 lần/ngày', 'Thông báo về đường dây nóng của Quận/Huyện']
+    action: ['Khuyến khích bệnh nhân nhập viện - nếu ở nhà thì phải theo dói y tế sát bởi bác sỹ hàng ngày', 
+    'Cung cấp số điện thoại của Y tế địa phương cho bệnh nhân','Thông báo về đường dây nóng của Quận/Huyện']
   },
   NC3: {
     type: 'nc3',
@@ -264,7 +265,7 @@ const nextstep = {
       'Liên hệ TTYT báo: tình trạng nguy cơ cao, cần người trực tiếp thăm khám, mang theo SpO2',
       'Chủ động kiểm tra tình trạng giường trống tại BV Tầng 2,3 tại địa phương',
       'Phối hợp TTYT, 115 chuyển NB đến BV nếu đúng nguy cơ',
-      'Chuyển thông tin bệnh nhân cho bác sỹ chuyên khoa Covid theo dõi hoặc gọi 18001119 để được hỗ trợ khẩn cấp'
+      'Gọi 18001119 để được hỗ trợ hỗ trợ'
     ]
   },
   NC4: {
@@ -278,7 +279,7 @@ const nextstep = {
       'Liên hệ TTYT báo: tình trạng nguy cơ cao, cần người trực tiếp thăm khám, mang theo SpO2',
       'Chủ động kiểm tra tình trạng giường trống tại BV Tầng 2,3 tại địa phương',
       'Phối hợp TTYT, 115 chuyển NB đến BV nếu đúng nguy cơ',
-      'Chuyển thông tin bệnh nhân cho bác sỹ chuyên khoa Covid theo dõi hoặc gọi 18001119 để được hỗ trợ khẩn cấp'
+      'Gọi 18001119 để được hỗ trợ hỗ trợ'
     ]
   }
 }

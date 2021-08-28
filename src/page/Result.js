@@ -55,7 +55,7 @@ const NCResult = (props) => {
           setTab(newValue)
         }}
       >
-        <Tab label="Bác Sỹ"></Tab>
+        <Tab label="Nhân viên Y Tế"></Tab>
         <Tab label="Bệnh Nhân"></Tab>
       </Tabs>
       <TabPanel index={0} value={selectedTabIdx}>

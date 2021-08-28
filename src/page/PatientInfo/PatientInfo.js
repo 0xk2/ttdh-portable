@@ -13,6 +13,7 @@ function PatientInfo(props){
   let [patientInfo,setPatientInfo] = useState(props.location.patientInfo === undefined ? PatientDataStructure.frmdata.sections : props.location.patientInfo);
   const [selectedTabIdx, setTabIndex] = useState(0)
   const [failValidationString, setValidationString] = useState('')
+  const lastSelectedProvince = localStorage.getItem('lastSelectedProvince') === null ? "79" : localStorage.getItem('lastSelectedProvince');
   const validate = () => {
     const missingLabels = []
     Object.keys(patientInfo).map((section_id, sidx) => {
@@ -30,6 +31,19 @@ function PatientInfo(props){
     if(missingLabels.length === 0) {return true}
     else {return missingLabels}
   }
+  Object.keys(patientInfo).map((section_id, sidx) => {
+    const _section = patientInfo[section_id]
+    const _inputs = _section.inputs
+    Object.keys(_inputs).map((input_id, idx) => {
+      const _input = _inputs[input_id]
+      if(input_id === 'provinceCode' && _input.value === undefined){
+        patientInfo[section_id].inputs[input_id].value = lastSelectedProvince;
+        setPatientInfo({...patientInfo})
+      }
+      return 0
+    })
+    return 0
+  })
   return (
     <Container maxWidth="md" className="frm-container patient-info">
       <Box className="patient-header">
@@ -136,6 +150,9 @@ function PatientInfo(props){
                     <Select type="date" name={name} required={required} value={value === undefined ? '' : value}
                   label={label} fullWidth={true}  
                   onChange={(e) => {
+                    if(input_id === 'provinceCode'){
+                      localStorage.setItem('lastSelectedProvince', e.target.value)
+                    }
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
                     setPatientInfo({...patientInfo})
                   }}>
