@@ -6,7 +6,8 @@ import React from 'react';
 const AlphabetBullet = ['A','B','C','D']
 
 const FormData = (props) => {
-  const [frmdata, setState] = React.useState(NCLogic.frmdata)
+  const initFrmData = props.location.initFrmData !== undefined ? props.location.initFrmData : NCLogic.getFrmdata()
+  const [frmdata, setState] = React.useState(initFrmData)
   return (
     <div>
       <Container maxWidth="md" className="frm-container">
@@ -58,7 +59,8 @@ const FormData = (props) => {
             props.history.push({
               pathname: "/result",
               search: "",
-              data: result
+              data: result,
+              originalFrm: frmdata
             });
           }}>
             Tính kết quả

@@ -1,7 +1,12 @@
 .frm-container{
-  margin-top: 16px;
   margin-bottom: 16px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  min-height: 500px;
+}
+@media only screen and (min-width: 600px) {
+  .frm-container {
+    margin-top: 16px;
+  }
 }
 
 .title{

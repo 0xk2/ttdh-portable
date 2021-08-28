@@ -330,5 +330,8 @@ const calc = function(frmdata){
 }
 
 module.exports = {
-  frmdata, nextstep, calc
+  getFrmdata: () => {
+    return JSON.parse(JSON.stringify(frmdata))
+  },
+  nextstep, calc
 }

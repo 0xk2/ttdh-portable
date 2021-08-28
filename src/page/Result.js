@@ -2,7 +2,7 @@ import {Container, Button, Box} from '@material-ui/core';
 import { Tabs, Tab } from '@material-ui/core'
 import classnames from 'classnames';
 import {useState} from 'react';
-import { ChevronLeft, NavigateNext, Save } from '@material-ui/icons';
+import { ChevronLeft, NavigateNext, Save, Edit } from '@material-ui/icons';
 import { CheckCircle, LocalHospital } from '@material-ui/icons';
 
 const TabPanel = (props) => {
@@ -13,13 +13,12 @@ const TabPanel = (props) => {
 }
 
 const Result = (props) => {
-  console.log(props)
   return (
     <Container maxWidth="md" className="frm-container result-page">
       {
         props.location.data === undefined ? 
         <EmptyResultPage {...props}/> :
-        <NCResult {...props} data={props.location.data} />
+        <NCResult {...props} data={props.location.data} originalFrm={props.location.originalFrm} />
       }
     </Container>
   )
@@ -46,27 +45,36 @@ const NCResult = (props) => {
   const data = props.data
   const color = ["nc2","nc3","nc4"].indexOf(data.type) !== -1 ? "secondary.main" : "primary.main";
   const tabIndicatorColor = ["nc2","nc3","nc4"].indexOf(data.type) !== -1 ? "secondary" : "primary";
-  console.log(color)
   const [selectedTabIdx, setTab] = useState(0)
   return (
     <Box className="nc-result">
+      <Box className="pt16">
+        <Button color="primary" variant='outlined' startIcon={<Edit />}
+              onClick={() => {
+              props.history.push({
+              pathname: '/',
+              initFrmData: props.originalFrm
+            })
+          }}
+        >Sửa form</Button>
+      </Box>
       <Box className={classnames("title","annoucement")} color={color}>
         <Box>{data.title}</Box>
         <Box className="control">
-          <Button color="primary" variant='outlined' startIcon={<Save />}
+          <Button color="primary" variant='contained' startIcon={<Save />}
                 onClick={() => {
                 props.history.push({
                 pathname: '/'
               })
             }}
           >Lưu lại</Button>
-          <Button color="secondary" variant='outlined' startIcon={<NavigateNext />}
+          <Button color="secondary" variant='outlined' endIcon={<NavigateNext />}
               onClick={() => {
               props.history.push({
               pathname: '/'
             })
           }}
-          >BN tiếp theo</Button>
+          >Không lưu</Button>
         </Box>
       </Box>
       <Tabs
@@ -85,7 +93,7 @@ const NCResult = (props) => {
           Array.isArray(data.action) === true ?
           data.action.map((act, idx) => {
             return (
-              <div key={idx}>
+              <div key={idx} className="mt4">
                 <LocalHospital color={tabIndicatorColor} fontSize="small" className="text-heading-icon" /> <span>{act}</span>
               </div>
             )
@@ -97,7 +105,7 @@ const NCResult = (props) => {
           Array.isArray(data.consults) === true ?
           data.consults.map((consult, idx) => {
             return (
-              <div key={idx}>
+              <div key={idx} className="mt4">
                 <CheckCircle color={tabIndicatorColor} fontSize="small" className="text-heading-icon" /> <span>{consult}</span>
               </div>
             )
