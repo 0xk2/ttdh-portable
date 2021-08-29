@@ -5,12 +5,14 @@ import {useState} from 'react';
 import { Tabs, Tab } from '@material-ui/core'
 import TabPanel from '../../component/TabPanel';
 import { Close } from '@material-ui/icons';
+import Routing from '../../config/Routing';
 
 const Type = PatientDataStructure.Type
 const Validation = PatientDataStructure.Validation
 
 function PatientInfo(props){
-  let [patientInfo,setPatientInfo] = useState(props.location.patientInfo === undefined ? PatientDataStructure.frmdata.sections : props.location.patientInfo);
+  let [patientInfo,setPatientInfo] = useState(props.location.patientInfo === undefined ? 
+    JSON.parse(JSON.stringify(PatientDataStructure.frmdata.sections)) : JSON.parse(JSON.stringify(props.location.patientInfo)));
   const [selectedTabIdx, setTabIndex] = useState(0)
   const [failValidationString, setValidationString] = useState('')
   const lastSelectedProvince = localStorage.getItem('lastSelectedProvince') === null ? "79" : localStorage.getItem('lastSelectedProvince');
@@ -106,33 +108,34 @@ function PatientInfo(props){
                     })
                   }
                 }
+                const randstr = parseInt(100000*Math.random())+"-"
                 return (
                   <div key={idx}>
-                  {type === Type.TEXT ? <TextField name={name} required={required} value={value === undefined ? '' : value}
+                  {type === Type.TEXT ? <TextField id={randstr} name={randstr} required={required} value={value === undefined ? '' : value}
                   label={label} fullWidth={true} 
                   onChange={(e) => {
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
                     setPatientInfo({...patientInfo})
                   }} /> : null}
-                  {type === Type.TEXT_LONG ? <TextField name={name} required={required} value={value === undefined ? '' : value} multiline={true}
+                  {type === Type.TEXT_LONG ? <TextField id={name+randstr} name={name+randstr} required={required} value={value === undefined ? '' : value} multiline={true}
                   label={label} fullWidth={true} minRows={5}
                   onChange={(e) => {
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
                     setPatientInfo({...patientInfo})
                   }} /> : null}
-                  {type === Type.NUMBER ? <TextField type="number" name={name} required={required} value={value === undefined ? '' : value}
+                  {type === Type.NUMBER ? <TextField id={name+randstr} type="number" name={name+randstr} required={required} value={value === undefined ? '' : value}
                   label={label} fullWidth={true} 
                   onChange={(e) => {
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
                     setPatientInfo({...patientInfo})
                   }} /> : null}
-                  {type === Type.PHONE ? <TextField type="tel" name={name} required={required} value={value === undefined ? '' : value}
+                  {type === Type.PHONE ? <TextField type="tel" id={randstr} name={randstr} required={required} value={value === undefined ? '' : value}
                   label={label} fullWidth={true} 
                   onChange={(e) => {
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
                     setPatientInfo({...patientInfo})
                   }} /> : null}
-                  {type === Type.EMAIL ? <TextField type="email" name={name} required={required} value={value === undefined ? '' : value}
+                  {type === Type.EMAIL ? <TextField type="email" id={randstr} name={randstr} required={required} value={value === undefined ? '' : value}
                   label={label} fullWidth={true} 
                   onChange={(e) => {
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
@@ -172,7 +175,7 @@ function PatientInfo(props){
           const missingLabels = validate()
           if(missingLabels === true){
             props.history.push({
-              pathname: '/sang-loc',
+              pathname: Routing.NCEVALUATING,
               patientInfo,
               initFrmData: props.location.initFrmData
             })

@@ -2,14 +2,18 @@ import {FormControl, Container, Button, Box} from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import NCLogic from './nclogic';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Edit } from '@material-ui/icons';
 import { Redirect } from 'react-router';
+import Routing from '../../config/Routing';
 const AlphabetBullet = ['A','B','C','D']
 
 const FormData = (props) => {
   const initFrmData = props.location.initFrmData !== undefined ? props.location.initFrmData : NCLogic.getFrmdata()
   const [frmdata, setState] = React.useState(initFrmData)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  },[])
   if(props.location.patientInfo === undefined){
     return <Redirect to="/" />
   }
@@ -73,7 +77,7 @@ const FormData = (props) => {
           <Button variant="contained" color="primary" onClick={function(){
             const result = NCLogic.calc(frmdata)
             props.history.push({
-              pathname: "/ket-qua",
+              pathname: Routing.NCRESULT,
               search: "",
               data: result,
               originalFrm: frmdata,

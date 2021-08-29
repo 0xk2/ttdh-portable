@@ -27,6 +27,16 @@
   }
 }
 
+.inline-inputs{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  >div:nth-child(1) {
+    flex-grow: 1;
+    padding-right: 30px;
+  }
+}
+
 .footer {
   padding: 16px;
   text-align: center;
