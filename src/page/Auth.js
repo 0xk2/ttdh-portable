@@ -19,7 +19,7 @@ const FrmState = {
 
 const Auth = function(props) {
   const randstr = Math.random()*1000+"";
-  const [phoneNumber, setPhoneNumber] = useState('0915585266')
+  const [phoneNumber, setPhoneNumber] = useState('')
   const [validationCode, setValidationCode] = useState('')
   const [frmState, setFrmState] = useState(FrmState.PHONE)
   
