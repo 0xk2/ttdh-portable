@@ -65,7 +65,7 @@ const frmdata = {
           dataSource: 'local.vn_province'
         },
         'districtCode': {
-          label: 'Quận/Huyện',
+          label: 'Quận/Huyện/TP trực thuộc',
           name: 'districtCode',
           type: Type.DROPDOWN_SINGLE,
           validation: Validation.REQUIRED,

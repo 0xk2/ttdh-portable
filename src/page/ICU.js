@@ -13,35 +13,57 @@ function ChipNC(props){
   if(props.nc==='nc3'){
     return <Chip color="secondary" variant="outlined" label="NC3" />
   }else if(props.nc==='nc4'){
-    return <Chip color="secondary" variant="contained" label="NC4" />
+    return <Chip color="secondary" variant="default" label="NC4" />
   }
 }
 
 function ICU(props){
-  const [waiting, setWaiting] = useState({})
-  const [processing, setProcessing] = useState({})
+  const [waitingNC3, setWaitingNC3] = useState({})
+  const [waitingNC4, setWaitingNC4] = useState({})
+  const [processingNC3, setProcessingNC3] = useState({})
+  const [processingNC4, setProcessingNC4] = useState({})
   const [selectedTabIdx, setTab] = useState(0)
-  const lblWaiting = "Chờ xác minh (" + Object.keys(waiting).length + ")"
-  const lblProcessing = "Đang chăm sóc ("+ Object.keys(processing).length +")"
+  const lblWaiting = "Chưa chăm sóc (" + (Object.keys(waitingNC3).length + Object.keys(waitingNC4).length) + ")"
+  const lblProcessing = "Đang chăm sóc ("+ (Object.keys(processingNC3).length + Object.keys(processingNC4).length) +")"
   const {setSuccessMessage, setErrorMessage} = useUIHelper()
   useEffect(() => {
-    return onValue(ref(db, '/waiting'), (snapshot) => {
+    return onValue(ref(db, '/waiting/nc3'), (snapshot) => {
       if(snapshot.val() === null){
-        setWaiting({})
+        setWaitingNC3({})
       }else{
-        setWaiting(snapshot.val())
+        setWaitingNC3(snapshot.val())
       }
     })
   },[])
   useEffect(() => {
-    return onValue(ref(db, '/processing'), (snapshot) => {
+    return onValue(ref(db, '/waiting/nc4'), (snapshot) => {
       if(snapshot.val() === null){
-        setProcessing({})
+        setWaitingNC4({})
       }else{
-        setProcessing(snapshot.val())
+        setWaitingNC4(snapshot.val())
       }
     })
   },[])
+  useEffect(() => {
+    return onValue(ref(db, '/processing/nc3'), (snapshot) => {
+      if(snapshot.val() === null){
+        setProcessingNC3({})
+      }else{
+        setProcessingNC3(snapshot.val())
+      }
+    })
+  },[])
+  useEffect(() => {
+    return onValue(ref(db, '/processing/nc4'), (snapshot) => {
+      if(snapshot.val() === null){
+        setProcessingNC4({})
+      }else{
+        setProcessingNC4(snapshot.val())
+      }
+    })
+  },[])
+  const waiting = {...waitingNC3, ...waitingNC4}
+  const processing = {...processingNC3, ...processingNC4}
   return (
     <Container maxWidth="md" className="frm-container icu">
       <Box className="title pt16">Phòng cấp cứu online</Box>
@@ -56,12 +78,13 @@ function ICU(props){
         <Tab label={lblWaiting} index={0}></Tab>
         <Tab label={lblProcessing} index={1}></Tab>
       </Tabs>
-      <TabPanel index={0} value={selectedTabIdx}>
+      <TabPanel index={0} value={selectedTabIdx} className="tab-holder">
         {Object.keys(waiting).map((key,idx) => {
           const item = waiting[key];
+          const age = (new Date()).getFullYear() - parseInt(item.dob);
           return <Card className="icu-card" variant="outlined">
             <CardContent>
-              <Box>
+              <Box className="icu-card-name">
                 <Typography variant="h5" component="h2" gutterBottom>{item.name}</Typography>
                 <ChipNC nc={item.nc} />
               </Box>
@@ -71,13 +94,15 @@ function ICU(props){
                   setSuccessMessage('Đã copy!')
                 }} label={item.phone} />
               </Box>
-              <Box>
-                <Typography>{districtDataSource[item.districtCode].name_with_type}</Typography>
-                <Typography>Mã quận: {item.districtCode}</Typography>
+              <Box className="pt8">
+                <Typography>{age} tuổi</Typography>
+                <Typography>Ngụ tại: {item.address}</Typography>
+                <Typography>{districtDataSource[item.districtCode].path_with_type}</Typography>
+                <Typography>Mã khu vực: {item.districtCode}</Typography>
               </Box>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={() => {
+              <Button size="small" variant="outlined" onClick={() => {
                 console.log("key: ",item)
               }}>Chi tiết</Button>
             </CardActions>

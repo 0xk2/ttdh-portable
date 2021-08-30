@@ -49,7 +49,7 @@ function PatientInfo(props){
   return (
     <Container maxWidth="md" className="frm-container patient-info">
       <Box className="patient-header">
-        <Box className="title" color="secondary.main">Thông tin cá nhân</Box>
+        <Box className="title" color="secondary.main">Thông tin bệnh nhân</Box>
         <Box className="subtitle">Dữ liệu phục vụ chăm sóc tại nhà</Box>
       </Box>
       <Tabs
@@ -92,7 +92,7 @@ function PatientInfo(props){
                         if(parent_code === input_id){
                           Object.keys(dataSource).map((value, didx) => {
                             if(dataSource[value].parent_code === _input.value){
-                              items.push({value, label: dataSource[value].name});
+                              items.push({value, label: dataSource[value].name_with_type === undefined ? dataSource[value].name : dataSource[value].name_with_type});
                             }
                             return 0
                           })      
@@ -103,7 +103,7 @@ function PatientInfo(props){
                     })
                   }else{
                     Object.keys(dataSource).map((value, didx) => {
-                      items.push({value, label: dataSource[value].name});
+                      items.push({value, label: dataSource[value].name_with_type === undefined ? dataSource[value].name : dataSource[value].name_with_type});
                       return 0
                     })
                   }

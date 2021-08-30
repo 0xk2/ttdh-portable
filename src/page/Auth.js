@@ -60,6 +60,11 @@ const Auth = function(props) {
       if(typeof(newUserInfo) === 'string'){
         setErrorMessage('Các trường sau thiếu thông tin: '+newUserInfo)
       }else{
+        if(newUserInfo.referralCode==='icu'){
+          newUserInfo.type='icu-doctor'
+        }else{
+          newUserInfo.type='medical-staff'
+        }
         set(ref(db, 'users/' + currentUser.phoneNumber), newUserInfo)
         .then(() => {
           setSuccessMessage('Thành công')

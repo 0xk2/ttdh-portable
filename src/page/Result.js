@@ -93,14 +93,10 @@ const NCResult = (props) => {
               const {patientInfo, shortInfo} = resultProcessing(props.patientInfo, props.originalFrm, data, currentUser.phoneNumber)
               const updates = {}
               const key = currentUser.phoneNumber+'-'+parseInt(new Date().getTime()/1000)
-              updates['patients'] = {}
-              updates['patients'][key] = JSON.parse(JSON.stringify(patientInfo))
-              updates[shortInfo['nc']] = {}
-              updates[shortInfo['nc']][key] = JSON.parse(JSON.stringify(shortInfo))
-              if(shortInfo['nc'] === 'nc3' || shortInfo['nc'] === 'nc4'){
-                updates['waiting'] = {}
-                updates['waiting'][key] = JSON.parse(JSON.stringify(shortInfo))
-              }
+              updates['patients/'+key] = JSON.parse(JSON.stringify(patientInfo))
+              updates[shortInfo['nc']+'/'+key] = JSON.parse(JSON.stringify(shortInfo))
+              updates['waiting/'+shortInfo['nc']+'/'+key] = JSON.parse(JSON.stringify(shortInfo))
+              updates['users/'+currentUser.phoneNumber+'/patients/'+key] = JSON.parse(JSON.stringify(shortInfo))
               update(ref(db), updates)
               .then(() => {
                 setSuccessMessage('Lưu bệnh nhân thành công!')

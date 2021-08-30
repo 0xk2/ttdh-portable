@@ -61,6 +61,9 @@ const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneBut
         <TextField type="text" value={newUserInfo.region === undefined ? "":newUserInfo.region} required label="Khu vực hoạt động (Phường, xã)" fullWidth={true} onChange={(e) => {
           setNewUserInfo({...newUserInfo, 'region':e.target.value})
         }} />
+        <TextField type="text" value={newUserInfo.referralCode === undefined ? "":newUserInfo.referralCode} label="Mã giới thiệu (nếu có)" fullWidth={true} onChange={(e) => {
+          setNewUserInfo({...newUserInfo, 'referralCode':e.target.value})
+        }} />
         <Box style={{textAlign:"right"}}>
           <Button startIcon={<Save onClick={() => {
             const validated = validate()

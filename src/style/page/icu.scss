@@ -1,3 +1,17 @@
 .icu {
-  .icu-card{}
+  .title{
+    font-size: 30px;
+  }
+  .tab-holder{
+    >div {
+      margin-top: 10px;
+    }
+    .icu-card{
+      .icu-card-name{
+        display: grid;
+        grid-auto-flow: column;
+        grid-gap: 10px;
+      }
+    }
+  }
 }
