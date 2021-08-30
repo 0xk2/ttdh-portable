@@ -234,7 +234,7 @@ const nextstep = {
   },
   NC2: {
     type: 'nc2',
-    title: 'Ở tại nhà-theo dõi sát y tế (NC2)',
+    title: 'Nên nhập viện. Nếu Ở tại nhà thì theo dõi sát y tế (NC2)',
     consults: [
       'Tìm ngay TTYT địa phương và ghi nhớ đề phòng khi cần nhập viện',
       'Bác Sỹ sẽ gọi chăm sóc 2 lần/ngày',
@@ -251,7 +251,7 @@ const nextstep = {
       'Trường hợp của (Bác) sẽ vào BV thu dung, hiện tại có thể rất động BN, vì đây là nơi dành cho BN nhẹ, như trường hợp cùa Bác. Sẽ không thoải mái như tự chăm sóc ở nhà. Nên Bác cố gắng nha',
       'Tuy nhiên, khi có các dấu hiệu khó thở, mệt hơn, đau ngực, lạnh đầu ngón tay chân,…. cần liên hệ với số 18001119 hoặc 1022 hoặc với số điện thoại đang gọi đến (bác/anh/chị) để được hỗ trợ kịp thời'
     ],
-    action: ['Khuyến khích bệnh nhân nhập viện - nếu ở nhà thì phải theo dói y tế sát bởi bác sỹ hàng ngày', 
+    action: ['Khuyến khích bệnh nhân nhập viện - nếu ở nhà thì phải theo dõi y tế sát bởi bác sỹ hàng ngày', 
     'Cung cấp số điện thoại của Y tế địa phương cho bệnh nhân','Thông báo về đường dây nóng của Quận/Huyện']
   },
   NC3: {
