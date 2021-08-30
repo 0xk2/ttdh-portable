@@ -36,13 +36,14 @@ const resultProcessing = (originalPatientInfo, formData, result, userPhoneNumber
   const interviewSection = {
     'status': 'waiting',
     'user': userPhoneNumber,
-    'frmdata': formData
+    'frmdata': formData,
+    'nc': result.type
   }
   const patientInfo = {
     'imported_callio': false,
-    'nc': result.type,
     'created_at': timestamp,
-    'history': {}
+    'history': {},
+    'nc': result.type
   }
   Object.keys(originalPatientInfo).map((section_name) => {
     const inputs = originalPatientInfo[section_name].inputs

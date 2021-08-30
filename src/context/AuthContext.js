@@ -36,7 +36,6 @@ export function AuthProvider({children}) {
           setUserInfo(data)
         });
       }else{
-        // console.log('currentUser: ',remoteUser)
         history.push(Routing.LOGIN)
       }
     });

@@ -52,15 +52,14 @@ const Auth = function(props) {
   },[])
   return <Container maxWidth="md" className="frm-container auth">
     {isNil(currentUser) !== true && isNil(userInfo) !== true?
-      history.push(Routing.PATIENTINFO)
-      :null
+      userInfo.type === 'icu-doctor' ? history.push(Routing.ICU):history.push(Routing.PATIENTINFO):null
     }
     {isNil(currentUser) !== true && isNil(userInfo) === true? // loggedin but there is no userInfo
     <UserProfile handleResetPhone={handleResetPhone} phoneNumber={phoneNumber} save={(newUserInfo) => {
       if(typeof(newUserInfo) === 'string'){
         setErrorMessage('Các trường sau thiếu thông tin: '+newUserInfo)
       }else{
-        if(newUserInfo.referralCode==='icu'){
+        if(newUserInfo.referralCode==='chi-lien-xinh-gai'){
           newUserInfo.type='icu-doctor'
         }else{
           newUserInfo.type='medical-staff'

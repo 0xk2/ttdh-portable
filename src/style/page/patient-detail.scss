@@ -1,0 +1,32 @@
+.patient-detail{
+  .interview-session{
+    margin-top: 16px;
+    .session-title{
+      font-weight: 600;
+    }
+    .session-content{
+      margin: 8px 0px;
+    }
+    .form-result {
+      .form-title {
+        font-weight: 500;
+      }
+    }
+  }
+  .control {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.new-sesison-dialog{
+  padding: 16px;
+  .title{
+    font-weight: 600;
+  }
+  .input-title{
+    font-weight: 500;
+  }
+  .input-subtitle{
+    font-weight: 300;
+  }
+}

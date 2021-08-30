@@ -14,6 +14,7 @@ import Routing from './config/Routing';
 import { AuthProvider } from './context/AuthContext';
 import { UIHelperProvider } from './context/UIHelperContext';
 import ICU from './page/ICU';
+import PatientDetail from './page/PatientDetail';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path={Routing.NCRESULT} render={(props) => <Result {...props} />} exact />
             <Route path={Routing.PROFILE} render={(props) => <Dashboard {...props} />} exact />
             <Route path={Routing.ICU} render={(props) => <ICU {...props} />} exact />
+            <Route path={Routing.PATIENTPROFILE} render={(props) => <PatientDetail {...props} />} exact />
           </AuthProvider>
         </UIHelperProvider>
       </Switch>

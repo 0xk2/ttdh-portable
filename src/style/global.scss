@@ -37,6 +37,17 @@
   }
 }
 
+.icu-card-name{
+  display: flex;
+  h2 {
+    margin-right: 10px;
+  }
+}
+
+.enable-white-space{
+  white-space: pre-line;
+}
+
 .footer {
   padding: 16px;
   text-align: center;
