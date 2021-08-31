@@ -4,7 +4,8 @@ import { useAuth } from "../context/AuthContext"
 
 function PatientBook(props){
   const {userInfo} = useAuth()
-  const patients = userInfo === undefined?{}:userInfo.patients;
+  let patients = userInfo === undefined?{}:userInfo.patients;
+  patients = patients === undefined ?{}:patients
   return (
     <Container maxWidth="md" className="frm-container PatientBook">
       <Box className="title pt16">Danh sách bệnh nhân</Box>

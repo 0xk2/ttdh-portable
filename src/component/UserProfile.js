@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Box,TextField, Button, FormControlLabel, Checkbox, Select } from "@material-ui/core"
+import { Box,TextField, Button, FormControlLabel, Checkbox, Select, MenuItem } from "@material-ui/core"
 import { Autocomplete } from "@material-ui/lab"
 import { Save } from "@material-ui/icons"
 import ResetPhoneButton from "./ResetPhoneButton"
@@ -26,8 +26,8 @@ Object.keys(dataSource['local.vn_district']).map((d) => {
   return 0;
 })
 
-const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneButton}) => {
-  const [newUserInfo, setNewUserInfo] = useState({})
+const UserProfile = ({phoneNumber, handleResetPhone, saveHandler, disabledResetPhoneButton}) => {
+  const [newUserInfo, setNewUserInfo] = useState({region:"768",referralCode:"",task_f0:false,task_test:false,task_vaccine:false,expertise:"",name:"",email:""})
   const validate = () => {
     let validated = [];
     if(isStringNil(newUserInfo.name)) { validated.push('Tên') }
@@ -41,7 +41,7 @@ const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneBut
     <Box>
       <Box className="pt16 title" color="secondary.main">Hoàn tất thông tin đăng ký</Box>
       <Box className="form-data">
-        <TextField type="text" value={newUserInfo.name === undefined ? "":newUserInfo.name} label="Họ và tên" required={true} fullWidth={true} onChange={(e) => {
+        <TextField type="text" value={newUserInfo.name} label="Họ và tên" required={true} fullWidth={true} onChange={(e) => {
           setNewUserInfo({...newUserInfo, 'name':e.target.value})
         }} />
         <Box className="phone-ipt inline-inputs">
@@ -49,7 +49,7 @@ const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneBut
           <ResetPhoneButton onClick={handleResetPhone} disabled={disabledResetPhoneButton} />
         </Box>
         
-        <TextField type="email" value={newUserInfo.email === undefined ? "":newUserInfo.email} required={true} label="Email" fullWidth={true} onChange={(e) => {
+        <TextField type="email" value={newUserInfo.email} required={true} label="Email" fullWidth={true} onChange={(e) => {
           setNewUserInfo({...newUserInfo, 'email':e.target.value})
         }} />
         <Autocomplete freeSolo required
@@ -60,8 +60,8 @@ const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneBut
         onInputChange={(e, newValue) => {
           setNewUserInfo({...newUserInfo, 'expertise': newValue})
         }}
-        value={newUserInfo.expertise === undefined ? "" : newUserInfo.expertise}
-        inputValue={newUserInfo.expertise === undefined ? "" : newUserInfo.expertise}
+        value={newUserInfo.expertise}
+        inputValue={newUserInfo.expertise}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -74,19 +74,19 @@ const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneBut
         <Box className="pt16">
           <Box>Nhiệm vụ</Box>
           <Box>
-            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_f0 === undefined?false:newUserInfo.task_f0} onChange={(e) => setNewUserInfo({...newUserInfo, task_f0:e.target.checked})} />} 
+            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_f0} onChange={(e) => setNewUserInfo({...newUserInfo, task_f0:e.target.checked})} />} 
             label="Điều trị F0 tại nhà" />
           </Box>
           <Box>
-            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_test === undefined?false:newUserInfo.task_test} onChange={(e) => setNewUserInfo({...newUserInfo, task_test:e.target.checked})} />} 
+            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_test} onChange={(e) => setNewUserInfo({...newUserInfo, task_test:e.target.checked})} />} 
             label="Lấy mẫu xét nghiệm" />
           </Box>
           <Box>
-            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_vaccine === undefined?false:newUserInfo.task_vaccine} onChange={(e) => setNewUserInfo({...newUserInfo, task_vaccine:e.target.checked})} />} 
+            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_vaccine} onChange={(e) => setNewUserInfo({...newUserInfo, task_vaccine:e.target.checked})} />} 
             label="Tiêm vaccine" />
           </Box>
         </Box>
-        <Select value={newUserInfo.region === undefined ? "760":newUserInfo.region}
+        <Select value={newUserInfo.region}
           fullWidth={true}
           required label="Khu vực hoạt động (Phường, xã)"
           onChange={(e) => {
@@ -94,21 +94,22 @@ const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneBut
           }}
         >
           {Object.keys(HCMDistricts).map((d,k) => {
-            return (<option key={k} value={d}>{HCMDistricts[d].name_with_type}</option>)
+            return (<MenuItem key={k} value={d}>{HCMDistricts[d].name_with_type}</MenuItem>)
           })}
         </Select>
-        <TextField type="text" value={newUserInfo.referralCode === undefined ? "":newUserInfo.referralCode} label="Mã giới thiệu (nếu có)" fullWidth={true} onChange={(e) => {
+        <TextField type="text" value={newUserInfo.referralCode} label="Mã giới thiệu (nếu có)" fullWidth={true} onChange={(e) => {
           setNewUserInfo({...newUserInfo, 'referralCode':e.target.value})
         }} />
         <Box style={{textAlign:"right"}}>
-          <Button startIcon={<Save onClick={() => {
+          <Button startIcon={<Save />} variant="contained" color="primary"
+          onClick={() => {
             const validated = validate()
             if(validated === true){
-              save(newUserInfo)
+              saveHandler(newUserInfo)
             }else{
-              save(validated.join(', '))
+              saveHandler(validated.join(', '))
             }
-          }} />} variant="contained" color="primary">Lưu lại</Button>
+          }}>Lưu lại</Button>
         </Box>
       </Box>
     </Box>

@@ -73,12 +73,18 @@ const Auth = function(props) {
       }
     }, auth);
   },[])
-  return <Container maxWidth="md" className="frm-container auth">
-    {isNil(currentUser) !== true && isNil(userInfo) !== true?
-      userInfo.type === 'icu-doctor' ? history.push(Routing.ICU):history.push(Routing.PATIENTINFO):null
+  if(isNil(currentUser) !== true && isNil(userInfo) !== true){
+    if(userInfo.type === 'icu-doctor'){
+      history.push(Routing.ICU)
+      return <></>
+    }else{
+      history.push(Routing.PATIENTINFO)
+      return <></>
     }
+  }
+  return <Container maxWidth="md" className="frm-container auth">
     {isNil(currentUser) !== true && isNil(userInfo) === true? // loggedin but there is no userInfo
-    <UserProfile handleResetPhone={handleResetPhone} phoneNumber={phoneNumber || currentUser.phoneNumber} save={(newUserInfo) => {
+    <UserProfile handleResetPhone={handleResetPhone} phoneNumber={phoneNumber || currentUser.phoneNumber} saveHandler={(newUserInfo) => {
       if(typeof(newUserInfo) === 'string'){
         setErrorMessage('Các trường sau thiếu thông tin: '+newUserInfo)
       }else{
@@ -87,6 +93,7 @@ const Auth = function(props) {
         }else{
           newUserInfo.type='medical-staff'
         }
+        setBackdropState(true)
         set(ref(db, 'users/' + currentUser.phoneNumber), newUserInfo)
         .then(() => {
           setSuccessMessage('Thành công')
@@ -94,6 +101,8 @@ const Auth = function(props) {
         })
         .catch((error) => {
           setErrorMessage('Không lưu lại được!')
+        }).finally(() => {
+          setBackdropState(false)
         })
       }
     }} />

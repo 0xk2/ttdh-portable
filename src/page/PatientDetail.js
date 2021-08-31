@@ -119,7 +119,6 @@ const PatientDetail = function(props){
   const patientKey = props.location.search.substr(1,props.location.search.length)
   useEffect(() => {
     onValue(ref(db, '/patients/'+patientKey), (snapshot) => {
-      console.log('patientKy: ',patientKey)
       if(snapshot.val() === null){
         console.error('error!')
       }else{
@@ -292,7 +291,7 @@ const PatientDetail = function(props){
                 if(newSessionVal.status !== 'done'){
                   set(ref(db, '/processing/'+shortInfo.nc+"/"+patientKey), JSON.parse(JSON.stringify(shortInfo)))
                 }
-                const createdUserPhone = shortInfo.user
+                const createdUserPhone = patientKey.split('-')[0]
                 set(ref(db, '/users/'+createdUserPhone+"/patients/"+patientKey), JSON.parse(JSON.stringify(shortInfo)))
               }
               // set new session
