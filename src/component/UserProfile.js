@@ -14,8 +14,8 @@ const isStringNil = function(str){
 }
 const HCMDistricts = {
   "99999": {
-    "name": "Chiến dịch TTDH",
-    "name_with_type": "Chiến dịch TTDH",
+    "name": "Mạng lưới Thầy thuốc đồng hành",
+    "name_with_type": "Mạng lưới Thầy thuốc đồng hành",
     "code": "99999"
   }
 }
