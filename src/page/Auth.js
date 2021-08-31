@@ -9,6 +9,7 @@ import ResetPhoneButton from "../component/ResetPhoneButton";
 import UserProfile from "../component/UserProfile";
 import { getDatabase, ref, set } from "@firebase/database";
 import { useHistory } from "react-router";
+import { getAnalytics, logEvent } from "@firebase/analytics";
 
 const auth = getAuth()
 const db = getDatabase()
@@ -87,7 +88,9 @@ const Auth = function(props) {
     <UserProfile handleResetPhone={handleResetPhone} phoneNumber={phoneNumber || currentUser.phoneNumber} saveHandler={(newUserInfo) => {
       if(typeof(newUserInfo) === 'string'){
         setErrorMessage('Các trường sau thiếu thông tin: '+newUserInfo)
+        logEvent(getAnalytics(), 'register_missing_info', newUserInfo)
       }else{
+        logEvent(getAnalytics(), 'register_referal_code', newUserInfo.referralCode)
         if(normalizeAndRemoveSpaceVNString(newUserInfo.referralCode || '')==='thaythuocdonghanh2207'){
           newUserInfo.type='icu-doctor'
         }else{
@@ -97,9 +100,11 @@ const Auth = function(props) {
         set(ref(db, 'users/' + currentUser.phoneNumber), newUserInfo)
         .then(() => {
           setSuccessMessage('Thành công')
+          logEvent(getAnalytics(), 'register_success', currentUser.phoneNumber)
           history.push(Routing.PATIENTINFO)
         })
         .catch((error) => {
+          logEvent(getAnalytics(), 'register_failed', currentUser.phoneNumber)
           setErrorMessage('Không lưu lại được!')
         }).finally(() => {
           setBackdropState(false)

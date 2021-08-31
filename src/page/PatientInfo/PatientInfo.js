@@ -7,6 +7,7 @@ import { Tabs, Tab } from '@material-ui/core'
 import TabPanel from '../../component/TabPanel';
 import Routing from '../../config/Routing';
 import { useUIHelper } from '../../context/UIHelperContext';
+import { getAnalytics, logEvent } from '@firebase/analytics';
 
 const Type = PatientDataStructure.Type
 const Validation = PatientDataStructure.Validation
@@ -224,6 +225,7 @@ function PatientInfo(props){
           // missing value
           const noMissingLabels = validate()
           if(noMissingLabels !== true){
+            logEvent(getAnalytics(), "add_patient_fail_missing_value", noMissingLabels)
             setErrorMessage('Các trường sau thiếu thông tin: '+noMissingLabels.join(', '))
             return;
           }
@@ -232,6 +234,7 @@ function PatientInfo(props){
             const {func, value} = validationFuncs[i]
             const validationResult = func(value)
             if(validationResult !== true){
+              logEvent(getAnalytics(), "add_patient_fail_validation_failed", validationResult)
               setErrorMessage(validationResult)
               return;
             }

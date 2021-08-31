@@ -10,6 +10,7 @@ import Routing from '../config/Routing'
 import {useUIHelper} from '../context/UIHelperContext'
 import {useAuth} from '../context/AuthContext'
 import { getDatabase, ref, update } from "@firebase/database";
+import { getAnalytics, logEvent } from '@firebase/analytics';
 
 const db = getDatabase()
 
@@ -85,14 +86,19 @@ const NCResult = (props) => {
     updates[shortInfo['nc']+'/'+key] = JSON.parse(JSON.stringify(shortInfo))
     updates['waiting/'+shortInfo['nc']+'/'+key] = JSON.parse(JSON.stringify(shortInfo))
     updates['users/'+currentUser.phoneNumber+'/patients/'+key] = JSON.parse(JSON.stringify(shortInfo))
+    if(shortInfo.nc === 'nc3' || shortInfo.nc === 'nc4'){
+      logEvent(getAnalytics(), 'nc3_nc4', key)
+    }
     update(ref(db), updates)
     .then(() => {
       setSuccessMessage('Lưu bệnh nhân thành công!')
+      logEvent(getAnalytics(), 'save_patient_success', key)
       props.history.push({
         pathname: Routing.PATIENTINFO
       })
     })
     .catch((error) => {
+      logEvent(getAnalytics(), 'save_patient_failed', key)
       setErrorMessage('Không lưu lại được, vui lòng thử lại')
     })
     .finally(() => {
