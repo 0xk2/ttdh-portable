@@ -3,7 +3,7 @@ import { Accordion, AccordionSummary, AccordionDetails } from "@material-ui/core
 import { Fragment, useEffect, useState } from "react";
 import dataStructure from "../page/PatientInfo/dataStructure"
 import PatientBriefInfo from "../component/PatientBriefInfo";
-import { getDatabase, ref, onValue, set } from "@firebase/database"
+import { getDatabase, ref, onValue, update } from "@firebase/database"
 import { useUIHelper } from "../context/UIHelperContext";
 import { Check, Close, ExpandMore, Save } from "@material-ui/icons";
 import Routing from '../config/Routing';
@@ -256,47 +256,49 @@ const PatientDetail = function(props){
               setBackdropState(true)
               // new key:
               const session_key = parseInt(new Date().getTime()/1000)+''
-              const shortInfo = {}
+              const shortInfo = {lastestSessionTimestamp: session_key}
               patientInfoKey.map((infoKey,idx) => {
                 shortInfo[infoKey] = newSessionInfo[infoKey] !== undefined? newSessionInfo[infoKey]: patientDetail[infoKey]
                 return 0
               })
+              const pureShortInfoObject = JSON.parse(JSON.stringify(shortInfo))
               // status-changed logic
+              const updates = {}
               if(latestSession.status === 'waiting'){
                 // delete from waiting list
-                set(ref(db, '/waiting/'+latestSession.nc+"/"+patientKey), null)
+                updates['/waiting/'+latestSession.nc+"/"+patientKey] = null
               }
               if(newSessionInfo.processing === true){
                 newSessionVal.status = 'processing'
                 // add to processing list
-                set(ref(db, '/processing/'+shortInfo.nc+"/"+patientKey), JSON.parse(JSON.stringify(shortInfo)))
+                updates['/processing/'+shortInfo.nc+"/"+patientKey] = pureShortInfoObject
               }
               else{
                 newSessionVal.status = 'done'
                 // delete from processing list
-                set(ref(db, '/processing/'+latestSession.nc+"/"+patientKey), null)
+                updates['/processing/'+latestSession.nc+"/"+patientKey] = null
               }
-
+              const createdUserPhone = patientKey.split('-')[0]
               // nc-changed logic
               if(newSessionInfo.nc !== latestSession.nc){
                 // delete from "/nc[old]"
-                set(ref(db, '/'+latestSession.nc+"/"+patientKey), null)
-                // add to "/nc[new]"
-                set(ref(db, '/'+shortInfo.nc+"/"+patientKey), JSON.parse(JSON.stringify(shortInfo)))
+                updates['/'+latestSession.nc+"/"+patientKey] = null
                 // delete "/processing/nc[old]/patientKey"
-                set(ref(db, '/processing/'+latestSession.nc+"/"+patientKey), null)
+                updates['/processing/'+latestSession.nc+"/"+patientKey] = null
                 // delete "/waiting/nc[old]/patientKey"
-                set(ref(db, '/waiting/'+latestSession.nc+"/"+patientKey), null)
-                // newSessionVal.status !== done => add to "/processing/nc[new]/patientKey"
-                if(newSessionVal.status !== 'done'){
-                  set(ref(db, '/processing/'+shortInfo.nc+"/"+patientKey), JSON.parse(JSON.stringify(shortInfo)))
-                }
-                const createdUserPhone = patientKey.split('-')[0]
-                set(ref(db, '/users/'+createdUserPhone+"/patients/"+patientKey), JSON.parse(JSON.stringify(shortInfo)))
+                updates['/waiting/'+latestSession.nc+"/"+patientKey] = null
               }
+              /// update latestTimestamp
+              updates['/'+shortInfo.nc+"/"+patientKey] = pureShortInfoObject
+              // newSessionVal.status !== done => add to "/processing/nc[new]/patientKey"
+              if(newSessionVal.status !== 'done'){
+                updates['/processing/'+shortInfo.nc+"/"+patientKey] = pureShortInfoObject
+              }
+              updates['/users/'+createdUserPhone+"/patients/"+patientKey] = pureShortInfoObject
+
               // set new session
-              
-              set(ref(db, '/patients/'+patientKey+'/history/'+session_key), JSON.parse(JSON.stringify(newSessionVal)))
+              updates['/patients/'+patientKey+'/history/'+session_key] = JSON.parse(JSON.stringify(newSessionVal))
+              update(ref(db), updates)
               setBackdropState(false)
               setNewSessionDialog(false)
               setNewSessionInfo({...newSessionInfo, ...{note:"",processing:true,nc:newSessionVal.nc}})

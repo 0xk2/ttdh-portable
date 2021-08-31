@@ -1,4 +1,4 @@
-import { Container, ListItem, List, Drawer } from "@material-ui/core";
+import { Container, ListItem, List, Drawer, ListItemIcon, ListItemText } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { Route } from "react-router-dom";
 import DefaultAppBar from "../component/DefaultAppBar";
@@ -6,13 +6,24 @@ import {useAuth} from '../context/AuthContext';
 import Routing from "../config/Routing";
 import { useHistory } from "react-router";
 import { isNil } from "lodash";
+import { makeStyles } from '@material-ui/core/styles';
+import { AssignmentInd, LocalHospital, PostAdd, PowerSettingsNew } from "@material-ui/icons";
+
+const useStyles = makeStyles((theme) => ({
+  profileItemStyle: {
+    color: "#fff",
+    backgroundColor: theme.palette.primary.main
+  }
+}));
+
 const listItems = [
-  {label: 'Thu thập thông tin', pathname: Routing.PATIENTINFO},
-  {label: 'Theo dõi bệnh nhân nặng', pathname: Routing.ICU, user_type: 'icu-doctor'},
-  {label: 'Hồ sơ bệnh nhân', pathname: Routing.PATIENTBOOK }
+  {label: 'Thu thập thông tin', pathname: Routing.PATIENTINFO, icon: <PostAdd />},
+  {label: 'Theo dõi bệnh nhân nặng', pathname: Routing.ICU, user_type: 'icu-doctor', icon: <LocalHospital />},
+  {label: 'Hồ sơ bệnh nhân', pathname: Routing.PATIENTBOOK, icon: <AssignmentInd /> }
 ]
 
 const AppbarLayout = function({children}) {
+  const classes = useStyles()
   let {userInfo, signOut} = useAuth()
   const history = useHistory()
   const [menuState, setMenuState] = useState(false)
@@ -44,21 +55,25 @@ const AppbarLayout = function({children}) {
       }}/>
       <div>
         <Drawer open={menuState} anchor={"left"} onClose={() => setMenuState(false)}>
-          <List>
-            <ListItem>
+          <List style={{paddingTop: "0px"}} component="nav">
+            <ListItem className={classes.profileItemStyle}>
               { isNil(userInfo) !== true ? userInfo.name: ""}
             </ListItem>
             {
               visibleItems.map((list, idx) => {
                 return <ListItem onClick={() => history.push({
                   pathname: list.pathname
-                })} selected={list.selected} key={idx}>
-                  {list.label}
+                })} selected={list.selected} key={idx} button={true}>
+                  {list.icon !== undefined? <ListItemIcon>{list.icon}</ListItemIcon>:null}
+                  <ListItemText primary={list.label}/>
                 </ListItem>
               })
             }
           </List>
-          <ListItem onClick={() => signOut()}>
+          <ListItem onClick={() => signOut()} button={true}>
+            <ListItemIcon>
+              <PowerSettingsNew />
+            </ListItemIcon>
             Đăng xuất
           </ListItem>
         </Drawer>  

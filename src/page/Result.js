@@ -31,7 +31,8 @@ const resultProcessing = (originalPatientInfo, formData, result, userPhoneNumber
   const interviewSessionKey = ['covidStatus','lastPositiveTestDate','testCode','testDate','testReason','ctValue','ctLevel',
   'getOutOfHospitalDate','fieldDoctor','fieldDoctorPhone','note']
   const shortInfo = {
-    'nc': result.type
+    'nc': result.type,
+    'lastestSessionTimestamp': timestamp
   }
   const interviewSection = {
     'status': 'waiting',
