@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { auth } from '../firebase';
-import {onAuthStateChanged} from 'firebase/auth';
+import {onAuthStateChanged,signOut} from 'firebase/auth';
 import { getDatabase, ref, onValue} from "firebase/database";
 import { useUIHelper } from "./UIHelperContext";
 import Routing from "../config/Routing";
@@ -21,7 +21,7 @@ export function useAuth(){
 export function AuthProvider({children}) {
   const [currentUser, setCurrentUser] = useState()
   const [userInfo, setUserInfo] = useState()
-  const {setBackdropState} = useUIHelper()
+  const {setBackdropState, setErrorMessage} = useUIHelper()
   const history = useHistory()
   useEffect(() => {
     setBackdropState(true)
@@ -45,7 +45,18 @@ export function AuthProvider({children}) {
     currentUser,
     userInfo,
     setUserInfo,
-    setCurrentUser
+    setCurrentUser,
+    signOut : function(){
+      setBackdropState(true)
+      signOut(auth).then(() => {
+        setBackdropState(false)
+        history.push(Routing.LOGIN)
+      }).catch((error) => {
+        setErrorMessage('Không thể đăng xuất')
+      }).finally(() => {
+        setBackdropState(false)
+      })
+    }
   }
   return (
     <AuthContext.Provider value={value}>

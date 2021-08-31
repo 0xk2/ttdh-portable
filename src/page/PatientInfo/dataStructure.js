@@ -11,6 +11,7 @@ const Type = {
   EMAIL: 'text.email',
   DROPDOWN_SINGLE: 'dropdown.single',
   DROPDOWN_MULTIPLE: 'dropdown.multiple',
+  AUTOCOMPLETE_FREESOLO: 'autocomplete.freeSolo',
   BOOL: 'bool',
   DATE: 'date'
 }
@@ -29,7 +30,10 @@ const frmdata = {
           label: 'Tuổi',
           name: 'age',
           type: Type.NUMBER,
-          validation: Validation.RECOMMENDED
+          validation: Validation.RECOMMENDED,
+          validationFunc: (value) => {
+            return value > 0 ? true : "Tuổi phải lớn hơn 0"
+          }
         },
         'gender': {
           label: 'Giới tính',
@@ -38,11 +42,28 @@ const frmdata = {
           validation: Validation.RECOMMENDED,
           dataSource: 'local.gender'
         },
+        'takenCareByTTDH' : {
+          label: 'Đang được Thầy thuốc Đồng hành chăm sóc?',
+          name: 'takenCareByTTDH',
+          type: Type.BOOL,
+          value: false
+        },
         'phone': {
           label: 'Số điện thoại',
           name: 'phone',
           type: Type.PHONE,
-          validation: Validation.REQUIRED
+          validation: Validation.REQUIRED,
+          validationFunc: (value) => {
+            const vnPhoneRegex =/^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/
+            return vnPhoneRegex.test(value) === true ? true : "Số điện thoại sai định dạng"
+          }
+        },
+        'phoneBelongTo': {
+          label: 'Số điện thoại này là của',
+          name: 'phoneBelongTo',
+          type: Type.AUTOCOMPLETE_FREESOLO,
+          value: 'Tôi',
+          dataSource: ['Tôi','Con','Bố','Mẹ','Hàng xóm']
         },
         'covidStatus': {
           label: 'Tình trạng nhiễm covid',

@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { Box,TextField, Button } from "@material-ui/core"
+import { Box,TextField, Button, FormControlLabel, Checkbox, Select } from "@material-ui/core"
 import { Autocomplete } from "@material-ui/lab"
 import { Save } from "@material-ui/icons"
 import ResetPhoneButton from "./ResetPhoneButton"
+import dataSource from '../page/PatientInfo/dataSource'
 
 const MedicalExperties = [
   {'title': 'Sinh viên Y'},{'title': 'Bác Sỹ'}
@@ -11,12 +12,24 @@ const isStringNil = function(str){
   if(str === '' || str === undefined || str === null) return true
   return false
 }
+const HCMDistricts = {
+  "99999": {
+    "name": "Chiến dịch TTDH",
+    "name_with_type": "Chiến dịch TTDH",
+    "code": "99999"
+  }
+}
+Object.keys(dataSource['local.vn_district']).map((d) => {
+  if(dataSource['local.vn_district'][d].parent_code === "79"){
+    HCMDistricts[d] = dataSource['local.vn_district'][d]
+  }
+  return 0;
+})
 
 const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneButton}) => {
   const [newUserInfo, setNewUserInfo] = useState({})
   const validate = () => {
     let validated = [];
-    console.log(isStringNil(newUserInfo.name))
     if(isStringNil(newUserInfo.name)) { validated.push('Tên') }
     if(isStringNil(newUserInfo.email)) { validated.push('Email') }
     if(isStringNil(newUserInfo.expertise)) { validated.push('Chuyên môn') }
@@ -58,9 +71,32 @@ const UserProfile = ({phoneNumber, handleResetPhone, save, disabledResetPhoneBut
             InputProps={{ ...params.InputProps, type: 'text' }}
           />
         )} />
-        <TextField type="text" value={newUserInfo.region === undefined ? "":newUserInfo.region} required label="Khu vực hoạt động (Phường, xã)" fullWidth={true} onChange={(e) => {
-          setNewUserInfo({...newUserInfo, 'region':e.target.value})
-        }} />
+        <Box className="pt16">
+          <Box>Nhiệm vụ</Box>
+          <Box>
+            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_f0 === undefined?false:newUserInfo.task_f0} onChange={(e) => setNewUserInfo({...newUserInfo, task_f0:e.target.checked})} />} 
+            label="Điều trị F0 tại nhà" />
+          </Box>
+          <Box>
+            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_test === undefined?false:newUserInfo.task_test} onChange={(e) => setNewUserInfo({...newUserInfo, task_test:e.target.checked})} />} 
+            label="Lấy mẫu xét nghiệm" />
+          </Box>
+          <Box>
+            <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.task_vaccine === undefined?false:newUserInfo.task_vaccine} onChange={(e) => setNewUserInfo({...newUserInfo, task_vaccine:e.target.checked})} />} 
+            label="Tiêm vaccine" />
+          </Box>
+        </Box>
+        <Select value={newUserInfo.region === undefined ? "760":newUserInfo.region}
+          fullWidth={true}
+          required label="Khu vực hoạt động (Phường, xã)"
+          onChange={(e) => {
+            setNewUserInfo({...newUserInfo, 'region':e.target.value})
+          }}
+        >
+          {Object.keys(HCMDistricts).map((d,k) => {
+            return (<option key={k} value={d}>{HCMDistricts[d].name_with_type}</option>)
+          })}
+        </Select>
         <TextField type="text" value={newUserInfo.referralCode === undefined ? "":newUserInfo.referralCode} label="Mã giới thiệu (nếu có)" fullWidth={true} onChange={(e) => {
           setNewUserInfo({...newUserInfo, 'referralCode':e.target.value})
         }} />

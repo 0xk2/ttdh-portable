@@ -27,7 +27,7 @@ const Result = (props) => {
 
 const resultProcessing = (originalPatientInfo, formData, result, userPhoneNumber) => {
   const timestamp = parseInt(new Date().getTime()/1000)+''
-  const patientInfoKey = ['name','gender','phone','provinceCode','districtCode','address']
+  const patientInfoKey = ['name','gender','phone','provinceCode','districtCode','address','phoneBelongTo','takenCareByTTDH']
   const interviewSessionKey = ['covidStatus','lastPositiveTestDate','testCode','testDate','testReason','ctValue','ctLevel',
   'getOutOfHospitalDate','fieldDoctor','fieldDoctorPhone','note']
   const shortInfo = {
@@ -42,8 +42,7 @@ const resultProcessing = (originalPatientInfo, formData, result, userPhoneNumber
   const patientInfo = {
     'imported_callio': false,
     'created_at': timestamp,
-    'history': {},
-    'nc': result.type
+    'history': {}
   }
   Object.keys(originalPatientInfo).map((section_name) => {
     const inputs = originalPatientInfo[section_name].inputs
@@ -76,6 +75,29 @@ const NCResult = (props) => {
   const [selectedTabIdx, setTab] = useState(0)
   const {setBackdropState, setErrorMessage, setSuccessMessage} = useUIHelper()
   const {currentUser} = useAuth()
+  const saveHandler = () => {
+    setBackdropState(true)
+    const {patientInfo, shortInfo} = resultProcessing(props.patientInfo, props.originalFrm, data, currentUser.phoneNumber)
+    const updates = {}
+    const key = currentUser.phoneNumber+'-'+parseInt(new Date().getTime()/1000)
+    updates['patients/'+key] = JSON.parse(JSON.stringify(patientInfo))
+    updates[shortInfo['nc']+'/'+key] = JSON.parse(JSON.stringify(shortInfo))
+    updates['waiting/'+shortInfo['nc']+'/'+key] = JSON.parse(JSON.stringify(shortInfo))
+    updates['users/'+currentUser.phoneNumber+'/patients/'+key] = JSON.parse(JSON.stringify(shortInfo))
+    update(ref(db), updates)
+    .then(() => {
+      setSuccessMessage('Lưu bệnh nhân thành công!')
+      props.history.push({
+        pathname: Routing.PATIENTINFO
+      })
+    })
+    .catch((error) => {
+      setErrorMessage('Không lưu lại được, vui lòng thử lại')
+    })
+    .finally(() => {
+      setBackdropState(false)
+    })
+  }
   return (
     <Box className="nc-result">
       <Box className="pt16 control">
@@ -89,29 +111,7 @@ const NCResult = (props) => {
           }}
         >Sàng lọc</Button>
         <Button color="secondary" variant='outlined' endIcon={<Save />}
-            onClick={() => {
-              setBackdropState(true)
-              const {patientInfo, shortInfo} = resultProcessing(props.patientInfo, props.originalFrm, data, currentUser.phoneNumber)
-              const updates = {}
-              const key = currentUser.phoneNumber+'-'+parseInt(new Date().getTime()/1000)
-              updates['patients/'+key] = JSON.parse(JSON.stringify(patientInfo))
-              updates[shortInfo['nc']+'/'+key] = JSON.parse(JSON.stringify(shortInfo))
-              updates['waiting/'+shortInfo['nc']+'/'+key] = JSON.parse(JSON.stringify(shortInfo))
-              updates['users/'+currentUser.phoneNumber+'/patients/'+key] = JSON.parse(JSON.stringify(shortInfo))
-              update(ref(db), updates)
-              .then(() => {
-                setSuccessMessage('Lưu bệnh nhân thành công!')
-                props.history.push({
-                  pathname: Routing.PATIENTINFO
-                })
-              })
-              .catch((error) => {
-                setErrorMessage('Không lưu lại được, vui lòng thử lại')
-              })
-              .finally(() => {
-                setBackdropState(false)
-              })
-        }}
+            onClick={saveHandler}
         >Tiếp theo</Button>
       </Box>
       <Box className={classnames("title","annoucement")} color={color}>
@@ -152,6 +152,11 @@ const NCResult = (props) => {
           }) : <div><CheckCircle color={tabIndicatorColor} fontSize="small" className="text-heading-icon" /> <span>{data.consults}</span></div>
         }
       </TabPanel>
+      <Box className="pt16" style={{textAlign:"center"}}>
+        <Button color="secondary" variant="contained" startIcon={<Save />} onClick={saveHandler}>
+          Lưu lại
+        </Button>
+      </Box>
     </Box>
   )
 }

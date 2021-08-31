@@ -18,6 +18,11 @@ function PatientBriefInfo({item, age, clipboardHandler, className}) {
         <Box>
           <Typography>{item.gender==='Male'?"Nam":"Nữ"}, {age} tuổi</Typography>
         </Box>
+        {item.phoneBelongTo !== 'Tôi'?
+        <Box>
+          <Typography>Số điện thoại thuộc về  {item.phoneBelongTo}</Typography>
+        </Box>: null
+        }
         <Typography>Số nhà/tên đường: {item.address}</Typography>
         <Typography>{districtDataSource[item.districtCode] !== undefined ? districtDataSource[item.districtCode].path_with_type: null}</Typography>
         <Typography>Mã khu vực: {item.districtCode}</Typography>

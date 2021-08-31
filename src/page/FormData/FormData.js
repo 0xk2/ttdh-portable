@@ -24,7 +24,7 @@ const FormData = (props) => {
           <Button color="primary" variant='outlined' startIcon={<Edit />}
                 onClick={() => {
                 props.history.push({
-                pathname: '/',
+                pathname: Routing.PATIENTINFO,
                 patientInfo: props.location.patientInfo,
                 initFrmData
               })

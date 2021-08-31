@@ -6,6 +6,7 @@ const Routing = {
   PROFILE: "/ca-nhan",
   ICU: "/cap-cuu",
   PATIENTPROFILE: "/benh-nhan",
+  PATIENTBOOK: "/danh-sach-benh-nhan",
   EXPORT: "/export"
 }
 

@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 import FormData from './page/FormData/FormData';
-import Dashboard from './page/Dashboard';
+import PatientBook from './page/PatientBook';
 import Auth from './page/Auth';
 import Result from './page/Result';
 import PatientInfo from './page/PatientInfo/PatientInfo';
@@ -15,6 +15,7 @@ import { AuthProvider } from './context/AuthContext';
 import { UIHelperProvider } from './context/UIHelperContext';
 import ICU from './page/ICU';
 import PatientDetail from './page/PatientDetail';
+import AppbarLayoutRoute from './layout/AppbarLayoutRoute';
 
 function App() {
   return (
@@ -23,12 +24,13 @@ function App() {
         <UIHelperProvider>
           <AuthProvider>
             <Route path={Routing.LOGIN} render={(props) => <Auth {...props} />} exact />
-            <Route path={Routing.PATIENTINFO} render={(props) => <PatientInfo {...props} />} exact />
-            <Route path={Routing.NCEVALUATING} render={(props) => <FormData {...props} />} exact />
-            <Route path={Routing.NCRESULT} render={(props) => <Result {...props} />} exact />
-            <Route path={Routing.PROFILE} render={(props) => <Dashboard {...props} />} exact />
-            <Route path={Routing.ICU} render={(props) => <ICU {...props} />} exact />
-            <Route path={Routing.PATIENTPROFILE} render={(props) => <PatientDetail {...props} />} exact />
+            <AppbarLayoutRoute path={Routing.PATIENTBOOK} component={PatientBook} exact/>
+            <AppbarLayoutRoute path={Routing.PATIENTINFO} component={PatientInfo} exact/>
+            <AppbarLayoutRoute path={Routing.NCEVALUATING} component={FormData} exact/>
+            <AppbarLayoutRoute path={Routing.NCRESULT} component={Result} exact/>
+            <AppbarLayoutRoute path={Routing.ICU} component={ICU} exact/>
+            <AppbarLayoutRoute path={Routing.PATIENTPROFILE} component={PatientDetail} exact/>
+            {/* <Route path={Routing.PATIENTPROFILE} render={(props) => <PatientDetail {...props} />} exact /> */}
           </AuthProvider>
         </UIHelperProvider>
       </Switch>

@@ -1,11 +1,12 @@
-import {Container, TextField, Box, Select, MenuItem, Button, Snackbar, IconButton} from '@material-ui/core';
+import {Container, TextField, Box, Select, MenuItem, Button, FormControlLabel, Checkbox} from '@material-ui/core';
+import { Autocomplete }from '@material-ui/lab';
 import PatientDataStructure from './dataStructure';
 import DataSource from './dataSource';
 import {useState} from 'react';
 import { Tabs, Tab } from '@material-ui/core'
 import TabPanel from '../../component/TabPanel';
-import { Close } from '@material-ui/icons';
 import Routing from '../../config/Routing';
+import { useUIHelper } from '../../context/UIHelperContext';
 
 const Type = PatientDataStructure.Type
 const Validation = PatientDataStructure.Validation
@@ -14,8 +15,8 @@ function PatientInfo(props){
   let [patientInfo,setPatientInfo] = useState(props.location.patientInfo === undefined ? 
     JSON.parse(JSON.stringify(PatientDataStructure.frmdata.sections)) : JSON.parse(JSON.stringify(props.location.patientInfo)));
   const [selectedTabIdx, setTabIndex] = useState(0)
-  const [failValidationString, setValidationString] = useState('')
   const lastSelectedProvince = localStorage.getItem('lastSelectedProvince') === null ? "79" : localStorage.getItem('lastSelectedProvince');
+  const {setErrorMessage} = useUIHelper()
   const validate = () => {
     const missingLabels = []
     Object.keys(patientInfo).map((section_id, sidx) => {
@@ -23,7 +24,8 @@ function PatientInfo(props){
       const _inputs = _section.inputs
       Object.keys(_inputs).map((input_id, idx) => {
         const _input = _inputs[input_id]
-        if(_input.validation === Validation.REQUIRED && _input.value === undefined){
+        if(_input.validation === Validation.REQUIRED && 
+          (_input.value === undefined || _input.value === "" || _input.value === null)){
           missingLabels.push(_input.label)
         }
         return 0
@@ -46,6 +48,7 @@ function PatientInfo(props){
     })
     return 0
   })
+  const validationFuncs = []
   return (
     <Container maxWidth="md" className="frm-container patient-info">
       <Box className="patient-header">
@@ -76,7 +79,8 @@ function PatientInfo(props){
               Object.keys(inputs).map((input_id, idx) => {
                 // render a input
                 const input = inputs[input_id]
-                const {type, label, name, validation, value, parent_code} = input;
+                const {type, label, name, validation, value, parent_code}  = input;
+                const validationFunc = PatientDataStructure.frmdata.sections[section_id].inputs[input_id].validationFunc
                 const required = validation === Validation.REQUIRED ? true : false;
                 const items = []
                 if(type === Type.DROPDOWN_SINGLE || type === Type.DROPDOWN_MULTIPLE) {
@@ -108,7 +112,21 @@ function PatientInfo(props){
                     })
                   }
                 }
+                if(type === Type.AUTOCOMPLETE_FREESOLO) {
+                  if(Array.isArray(input.dataSource) === true){
+                    input.dataSource.map((itm) => { items.push(itm); return 0}
+                    ) 
+                  }else{
+                    DataSource[input.dataSource].map((itm) => {items.push(itm); return 0}  )
+                  }
+                }
                 const randstr = parseInt(100000*Math.random())+"-"
+                if(validationFunc !== undefined){
+                  validationFuncs.push({
+                    func: validationFunc,
+                    value
+                  })
+                }
                 return (
                   <div key={idx}>
                   {type === Type.TEXT ? <TextField id={randstr} name={randstr} required={required} value={value === undefined ? '' : value}
@@ -129,7 +147,7 @@ function PatientInfo(props){
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
                     setPatientInfo({...patientInfo})
                   }} /> : null}
-                  {type === Type.PHONE ? <TextField type="tel" id={randstr} name={randstr} required={required} value={value === undefined ? '' : value}
+                  {type === Type.PHONE ? <TextField type="tel" id={randstr} name={randstr} variant="filled" required={required} value={value === undefined ? '' : value}
                   label={label} fullWidth={true} 
                   onChange={(e) => {
                     patientInfo[section_id].inputs[input_id].value = e.target.value;
@@ -163,6 +181,37 @@ function PatientInfo(props){
                       return <MenuItem value={item.value} key={k}>{item.label}</MenuItem>
                     })}
                   </Select></Box>: null}
+                  {type === Type.AUTOCOMPLETE_FREESOLO ? 
+                    <Autocomplete freeSolo required={required}
+                    options={items.map((option) => option)} disableClearable 
+                    onChange={(e, newValue) => {
+                      patientInfo[section_id].inputs[input_id].value = newValue;
+                      setPatientInfo({...patientInfo})
+                    }}
+                    onInputChange={(e, newValue) => {
+                      patientInfo[section_id].inputs[input_id].value = newValue;
+                      setPatientInfo({...patientInfo})
+                    }}
+                    value={value === undefined ? '':value}
+                    inputValue={value === undefined ? '':value}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={label}
+                        margin="normal"
+                        variant="filled" required={required}
+                        InputProps={{ ...params.InputProps, type: 'text' }}
+                      />
+                    )} />
+                  :null}
+                  {type === Type.BOOL?
+                    <FormControlLabel color='secondary.main' control={
+                      <Checkbox required={required} checked={value===undefined?false:value} onChange={(e) => {
+                        patientInfo[section_id].inputs[input_id].value = e.target.checked;
+                        setPatientInfo({...patientInfo})
+                      }} />
+                    } label={label} />
+                  :null}
                   </div>
                 )
               })
@@ -172,35 +221,28 @@ function PatientInfo(props){
       })}
       <Box className="control">
         <Button variant="contained" color="secondary" onClick={() => {
-          const missingLabels = validate()
-          if(missingLabels === true){
-            props.history.push({
-              pathname: Routing.NCEVALUATING,
-              patientInfo,
-              initFrmData: props.location.initFrmData
-            })
-          }else {
-            setValidationString('Các trường sau thiếu thông tin: '+missingLabels.join(', '))
+          // missing value
+          const noMissingLabels = validate()
+          if(noMissingLabels !== true){
+            setErrorMessage('Các trường sau thiếu thông tin: '+noMissingLabels.join(', '))
+            return;
           }
+          // invalidate values
+          for(var i=0;i<validationFuncs.length;i++){
+            const {func, value} = validationFuncs[i]
+            const validationResult = func(value)
+            if(validationResult !== true){
+              setErrorMessage(validationResult)
+              return;
+            }
+          }
+          props.history.push({
+            pathname: Routing.NCEVALUATING,
+            patientInfo,
+            initFrmData: props.location.initFrmData
+          })
         }}>{props.location.initFrmData === undefined? "Bắt đầu sàng lọc" : "Tiếp tục"}</Button>
       </Box>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        open={failValidationString !== ''}
-        autoHideDuration={6000}
-        onClose={() => {
-          setValidationString('')
-        }}
-        message={failValidationString}
-        action={<IconButton size="small" aria-label="close" color="inherit" onClick={() => {
-          setValidationString('')
-        }}>
-          <Close fontSize="small" />
-        </IconButton>}
-      />
     </Container>
   )
 }
