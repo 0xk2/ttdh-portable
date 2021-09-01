@@ -7,7 +7,8 @@ const Routing = {
   ICU: "/cap-cuu",
   PATIENTPROFILE: "/benh-nhan",
   PATIENTBOOK: "/danh-sach-benh-nhan",
-  EXPORT: "/export"
+  EXPORT: "/export",
+  USER: "/user"
 }
 
 export default Routing;

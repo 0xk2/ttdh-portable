@@ -1,6 +1,9 @@
 import {Type, Validation} from '../config/Constants'
 import { TextField } from '@material-ui/core'
-
+/**
+ * Work in progress
+ * TODO: create a seperate module to render form input for efficiency and optimization
+ */
 export const InputRender = function({id, name, required, value, label, fullWidth, browserAutocomplete, onChange}) {
   const randStr = parseInt(100000*Math.random())+""
   if(browserAutocomplete === true){

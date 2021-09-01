@@ -38,6 +38,11 @@
   }
 }
 
+.controller {
+  display: flex;
+  justify-content: space-between;
+}
+
 .icu-card-name{
   display: flex;
   h2 {

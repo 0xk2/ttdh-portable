@@ -3,14 +3,26 @@ import PatientBriefInfo from "./PatientBriefInfo";
 import { useHistory } from "react-router";
 import { useUIHelper } from "../context/UIHelperContext";
 import Routing from "../config/Routing";
+import {SORT} from '../config/Constants';
+import { sortBy } from "lodash";
 
-function PatientList(items) {
+function PatientList(items, sorting) {
   const history = useHistory()
   const {setSuccessMessage} = useUIHelper()
+  //put key inside object before sorting
+  Object.keys(items).map((key) => items[key].key=key)
+  switch(sorting){
+    case SORT.OLDEST:
+      items = sortBy(items, [function(item) { return item.lastestSessionTimestamp === undefined?0:parseInt(item.lastestSessionTimestamp) }])
+      break;
+    case SORT.LATEST:
+    default:
+      items = sortBy(items, [function(item) { return item.lastestSessionTimestamp === undefined?0:parseInt(item.lastestSessionTimestamp)*-1 }])
+      break;
+  }
   return (
     <>
-    {Object.keys(items).map((key,idx) => {
-      const item = items[key];
+    {items.map((item,idx) => {
       const age = (new Date()).getFullYear() - parseInt(item.dob);
       return <Card className="icu-card" variant="outlined" key={idx}>
         <CardContent>
@@ -23,8 +35,8 @@ function PatientList(items) {
           <Button size="small" variant="outlined" onClick={() => {
             history.push({
               pathname: Routing.PATIENTPROFILE,
-              patient_key: key,
-              search: key
+              patient_key: item.key,
+              search: item.key
             })
           }}>Chi tiết</Button>
         </CardActions>

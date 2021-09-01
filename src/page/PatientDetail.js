@@ -6,7 +6,6 @@ import PatientBriefInfo from "../component/PatientBriefInfo";
 import { getDatabase, ref, onValue, update } from "@firebase/database"
 import { useUIHelper } from "../context/UIHelperContext";
 import { Check, Close, ExpandMore, Save } from "@material-ui/icons";
-import Routing from '../config/Routing';
 import { useAuth } from "../context/AuthContext";
 import {renderTimeSinceAnchorDate} from '../utils/index';
 
@@ -118,7 +117,9 @@ const PatientDetail = function(props){
   const [expandedIdx, setExpanded] = useState(0)
   const patientKey = props.location.search.substr(1,props.location.search.length)
   useEffect(() => {
+    setBackdropState(true)
     onValue(ref(db, '/patients/'+patientKey), (snapshot) => {
+      setBackdropState(false)
       if(snapshot.val() === null){
         console.error('error!')
       }else{
@@ -141,7 +142,7 @@ const PatientDetail = function(props){
         setExpanded(timestampArray.length-1)
       }
     })
-  },[patientKey])
+  },[patientKey,setBackdropState])
   const age = (new Date()).getFullYear() - parseInt(patientDetail.dob);
   
   return (
@@ -165,7 +166,7 @@ const PatientDetail = function(props){
         {userInfo !== undefined && userInfo.type === 'icu-doctor'?
           <Button variant="contained" color="primary" onClick={() => setNewSessionDialog(true)}>Thêm kết quả chăm sóc</Button>
         :null}
-        <Button variant="outlined" color="secondary" onClick={() => props.history.push(Routing.ICU)}>Quay lại</Button>
+        <Button variant="outlined" color="secondary" onClick={() => props.history.goBack()}>Quay lại</Button>
       </Box>
       <Drawer anchor={'bottom'} open={newSessionDialog} onClose={() => setNewSessionDialog(false)}>
         <Box className="new-sesison-dialog">

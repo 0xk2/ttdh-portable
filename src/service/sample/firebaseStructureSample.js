@@ -40,6 +40,10 @@ const sample = {
           "status": "done",
           "doctor": "12348560"
         }
+      },
+      "followers":{
+        "12348560": true,
+        "12382980": true
       }
     }
   },
@@ -49,7 +53,11 @@ const sample = {
       "created_at": "2021-08-01",
       "type": "icu-doctor", //["icu-doctor", "medical-staff", "callio-staff"],
       "expertise": "Bác Sỹ",
-      "region":"Quận 3"
+      "region":"Quận 3",
+      "patients": {
+        "098723405-123273494": true,    
+        "098723405-123273495": true,
+      }
     }
   },
   "nc0":{

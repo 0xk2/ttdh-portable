@@ -27,7 +27,7 @@ Object.keys(dataSource['local.vn_district']).map((d) => {
 })
 
 const UserProfile = ({phoneNumber, handleResetPhone, saveHandler, disabledResetPhoneButton}) => {
-  const [newUserInfo, setNewUserInfo] = useState({region:"768",referralCode:"",task_f0:false,task_test:false,task_vaccine:false,expertise:"",name:"",email:""})
+  const [newUserInfo, setNewUserInfo] = useState({region:"768",referralCode:"",task_f0:false,task_test:false,task_vaccine:false,expertise:"",name:"",email:"",isTTDHMember:false})
   const validate = () => {
     let validated = [];
     if(isStringNil(newUserInfo.name)) { validated.push('Tên') }
@@ -48,10 +48,13 @@ const UserProfile = ({phoneNumber, handleResetPhone, saveHandler, disabledResetP
           <TextField type="text" value={phoneNumber} label="Số điện thoại" required={true} disabled />
           <ResetPhoneButton onClick={handleResetPhone} disabled={disabledResetPhoneButton} />
         </Box>
-        
         <TextField type="email" value={newUserInfo.email} required={true} label="Email" fullWidth={true} onChange={(e) => {
           setNewUserInfo({...newUserInfo, 'email':e.target.value})
         }} />
+        <Box className="phone-ipt inline-inputs">
+          <FormControlLabel className="pt8" control={<Checkbox checked={newUserInfo.isTTDHMember} onChange={(e) => setNewUserInfo({...newUserInfo, isTTDHMember:e.target.checked})} />} 
+              label="Đã là thành viên trên GapoWork của mạng lưới Thầy thuốc đồng hành chưa?" />
+        </Box>
         <Autocomplete freeSolo required
         options={MedicalExperties.map((option) => option.title)} disableClearable 
         onChange={(e, newValue) => {

@@ -16,6 +16,7 @@ import { UIHelperProvider } from './context/UIHelperContext';
 import ICU from './page/ICU';
 import PatientDetail from './page/PatientDetail';
 import AppbarLayoutRoute from './layout/AppbarLayoutRoute';
+import { User } from './page/User';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             <AppbarLayoutRoute path={Routing.NCRESULT} component={Result} exact/>
             <AppbarLayoutRoute path={Routing.ICU} component={ICU} exact/>
             <AppbarLayoutRoute path={Routing.PATIENTPROFILE} component={PatientDetail} exact/>
+            <AppbarLayoutRoute path={Routing.USER} component={User} exact/>
             {/* <Route path={Routing.PATIENTPROFILE} render={(props) => <PatientDetail {...props} />} exact /> */}
           </AuthProvider>
         </UIHelperProvider>
