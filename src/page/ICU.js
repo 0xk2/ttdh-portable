@@ -3,6 +3,7 @@ import { getDatabase, ref, onValue } from "@firebase/database"
 import {useState, useEffect} from 'react'
 import TabPanel from "../component/TabPanel"
 import PatientList from "../component/PatientList"
+import {SORT} from "../config/Constants"
 
 const db = getDatabase()
 
@@ -11,6 +12,10 @@ function ICU(props){
   const [waitingNC4, setWaitingNC4] = useState({})
   const [processingNC3, setProcessingNC3] = useState({})
   const [processingNC4, setProcessingNC4] = useState({})
+  const [sortBy, sort] = useState({
+    waiting: SORT.LATEST,
+    processing: SORT.OLDEST
+  })
   const [selectedTabIdx, setTab] = useState(0)
   const lblWaiting = "Chưa chăm sóc (" + (Object.keys(waitingNC3).length + Object.keys(waitingNC4).length) + ")"
   const lblProcessing = "Đang chăm sóc ("+ (Object.keys(processingNC3).length + Object.keys(processingNC4).length) +")"

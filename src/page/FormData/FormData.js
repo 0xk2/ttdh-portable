@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { Edit } from '@material-ui/icons';
 import { Redirect } from 'react-router';
 import Routing from '../../config/Routing';
-const AlphabetBullet = ['A','B','C','D']
+import {AlphabetBullet} from '../../config/Constants';
 
 const FormData = (props) => {
   const initFrmData = props.location.initFrmData !== undefined ? props.location.initFrmData : NCLogic.getFrmdata()
