@@ -3,7 +3,6 @@ import ChipNC from './ChipNC';
 import { Favorite, FavoriteBorder, FileCopy, Share } from "@material-ui/icons";
 import dataSource from "../page/PatientInfo/dataSource";
 import {renderTimeSinceAnchorDate} from '../utils/index'
-import { Fragment } from 'react';
 import { useUIHelper } from '../context/UIHelperContext';
 
 const districtDataSource = dataSource['local.vn_district']
