@@ -1,13 +1,15 @@
-import {Box, Typography, Chip, IconButton} from '@material-ui/core';
+import {Box, Typography, Chip, IconButton, TextField} from '@material-ui/core';
 import ChipNC from './ChipNC';
 import { Favorite, FavoriteBorder, FileCopy, Share } from "@material-ui/icons";
 import dataSource from "../page/PatientInfo/dataSource";
 import {renderTimeSinceAnchorDate} from '../utils/index'
 import { useUIHelper } from '../context/UIHelperContext';
+import ClipboardJS from 'clipboard';
 
 const districtDataSource = dataSource['local.vn_district']
 function PatientBriefInfo({item, age, clipboardHandler, className, favourite}) {
   const {setSuccessMessage} = useUIHelper()
+  let clipboardBnt;
   return (
     <Box className={className}>
       <Box className="patient-card-name">
@@ -29,10 +31,13 @@ function PatientBriefInfo({item, age, clipboardHandler, className, favourite}) {
       </Box>
       <Box>
         <Chip icon={<FileCopy />} onClick={clipboardHandler} label={item.phone} />
-        <IconButton onClick={() => {
-          navigator.clipboard.writeText(window.location.href)
+        <TextField id="foo" value={window.location.href} style={{zIndex:-999,position:"absolute",top:0,left:0,width:"1px"}} />
+        <IconButton id="foo" className="clipboard-btn" data-clipboard-target="#foo" onClick={(e) => {
+          clipboardBnt = new ClipboardJS('.clipboard-btn')
+          clipboardBnt.on('success', function(e){ console.log(e) })
+          clipboardBnt.on('error', function(e){ console.error(e) })
+          clipboardBnt.onClick(e)
           setSuccessMessage('Link đã được copy. Chia sẻ link này nhé: '+window.location.href)
-          window.open('zalo://share?link='+encodeURIComponent(window.location.href));
         }}>
           <Share color="primary" />
         </IconButton>
