@@ -15,7 +15,7 @@ meds.map((key) => {
   return 0
 })
 const defaultFormValue = {visiting: true, nc:'nc3', 'Tình trạng oxy':"Không có", "Thuốc khác":"", ...medInitial, 'Lý do ngừng chăm sóc': 'Đã khỏi bệnh', 'Thuốc được cấp':'Không'}
-const Question = function({initialState, patientDetail, patientInfoKey, saveHandler, onClose, onItemValueChange}){
+const Question = function({initialState, patientDetail, shortInfoKey, saveHandler, onClose, onItemValueChange}){
   initialState = initialState === undefined ? 
     {...defaultFormValue}:{...defaultFormValue, ...initialState}
   const [visiting, setVisting] = useState(initialState.visiting)
@@ -149,8 +149,11 @@ const Question = function({initialState, patientDetail, patientInfoKey, saveHand
         onClick={() => {
           const newSessionKey = ['Ghi chú','nc','Tình trạng oxy','Thuốc khác', 'Thuốc được cấp',...meds]
           const newSessionVal = {
-            'renderEngine':KEY
+            'renderEngine':KEY,
+            visiting: initialState.visiting === false ? false:true
           }
+          console.log('initialState.visiting: ',initialState.visiting)
+          console.log(newSessionVal)
           if(initialState.visiting === false){
             newSessionKey.push('Lý do ngừng chăm sóc')
           }
@@ -161,8 +164,8 @@ const Question = function({initialState, patientDetail, patientInfoKey, saveHand
           // new key:
           const session_key = parseInt(new Date().getTime()/1000)+''
           const shortInfo = {lastestSessionTimestamp: session_key}
-          console.log('patientInfoKey:',patientInfoKey)
-          patientInfoKey.map((infoKey,idx) => {
+          console.log('shortInfoKey:',shortInfoKey)
+          shortInfoKey.map((infoKey,idx) => {
             shortInfo[infoKey] = initialState[infoKey] !== undefined? initialState[infoKey]: patientDetail[infoKey]
             return 0
           })
@@ -176,52 +179,56 @@ const Question = function({initialState, patientDetail, patientInfoKey, saveHand
 const View = function(session){
   const sections = dataStructure.frmdata.sections
   let inputs = {
-    "user": { "label":"Người phỏng vấn"},
-    "status": { "label":"Trạng thái"},
+    "user": { "label":"Người thực hiện", render: (val) => {
+      return <a href={"tel:"+val}>{val}</a>
+    }},
+    "status": { "label":"Trạng thái", render: (val) => {
+      switch(val){
+        case "waiting": return "Chờ chăm sóc";
+        case "done": return "Đã kết thúc chăm sóc";
+        case "processing": 
+        default:
+        return "Đang chăm sóc";
+      }
+    } },
     "nc": { "label":"Nguy cơ"},
+    "Ghi chú":{ render: (val) => {
+      return <div className="enable-white-space">{val}</div>
+    } },
+    "note":{ "label":"Ghi chú/Lịch sử chăm sóc",render: (val) => {
+      return <div className="enable-white-space">{val}</div>
+    } }
   }
   Object.keys(sections).map((section_id) => {
-    inputs = {...inputs, ...sections[section_id].inputs}
+    inputs = {...sections[section_id].inputs, ...inputs}
     return 0
   })
   return (
     <Fragment>
       {session['frmdata'] !== undefined ? 
       <Box className="form-result">
-        <Box className="form-title">Kết quả chấm NC:</Box>
+        <Box className="form-title">Kết quả chấm nguy cơ:</Box>
         {RenderFormData(session['frmdata']) }
       </Box>
       : null}
       <Box className="form-result">
-        <Box className="form-title">Thông tin tổng quan:</Box>
+        <Box className="form-title">Thông tin chăm sóc:</Box>
         <ul>
         {Object.keys(session).map((key,idx) => {
-          console.log()
-          if(key === 'frmdata'){
+          if(['frmdata','renderEngine'].indexOf(key) !== -1){
             return null
-          }
-          if(key === 'renderEngine'){
-            return null
-          }
-          if(key === 'note') {
-            return (
-              <li key={idx}>
-                <div>Ghi chú</div>
-                <div className="enable-white-space">{session[key]}</div>
-              </li>
-            )
-          }
-          if(key === 'status') {
-            return (
-              <li key={idx}> Trạng thái: {session[key]==='waiting'?"Chờ chăm sóc":session[key]==='processing'?"Tiếp tục chăm sóc":"Đã ngừng chăm sóc"} </li>
-            )
           }
           return (
             <li key={idx}> 
-            {inputs[key]!==undefined?inputs[key].label:key}
+            {(inputs[key]!==undefined && inputs[key].label !== undefined)?inputs[key].label:key}
             : 
-            {session[key] === true? <Check color="primary" size="small"/>:
-              (session[key] === false || session[key] === undefined)===true?<Close color="secondary" size="small" />: " "+session[key]
+            {(inputs[key]!==undefined && inputs[key].render !== undefined)?
+              inputs[key].render(session[key]):
+              session[key] === true? 
+              <Check color="primary" size="small"/>:
+              (session[key] === false || session[key] === undefined)===true?
+              <Close color="secondary" size="small" />
+              :" "+session[key]
             } 
             </li>
           )

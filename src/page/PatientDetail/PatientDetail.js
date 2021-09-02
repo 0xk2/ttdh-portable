@@ -1,19 +1,18 @@
-import { Container,Box, Drawer, Button } from "@material-ui/core";
+import { Container,Box, Drawer, Button, IconButton } from "@material-ui/core";
 import { Accordion, AccordionSummary, AccordionDetails } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import PatientBriefInfo from "../../component/PatientBriefInfo";
 import { getDatabase, ref, onValue, update } from "@firebase/database"
 import { useUIHelper } from "../../context/UIHelperContext";
-import { ExpandMore } from "@material-ui/icons";
+import { ExpandMore, Add, ArrowBack } from "@material-ui/icons";
 import { useAuth } from "../../context/AuthContext";
 import {renderTimeSinceAnchorDate} from '../../utils/index';
 import RenderASesion from './render/RenderASession'
 import ICUDoctor from './render/icu-doctor'
 import MedicalStaff from "./render/medical-staff";
 import { isNil } from "lodash";
-
+const shortInfoKey = ['name','gender','phone','provinceCode','districtCode','address','nc','dob','status']
 const db = getDatabase()
-
 const getLatestSession = function(info){
   const timestampArray = []
   Object.keys(info.history).map((str) => {
@@ -22,7 +21,18 @@ const getLatestSession = function(info){
   })
   return info.history[Math.max(...timestampArray)]
 }
-const patientInfoKey = ['name','gender','phone','provinceCode','districtCode','address','nc','dob']
+const getShortInfo = function(info){
+  const shortInfo = {}
+  const lastestSession = getLatestSession(info)
+  shortInfoKey.map((key) => {
+    const val = lastestSession[key] === undefined ? info[key] :lastestSession[key]
+    if(val !== undefined){
+      shortInfo[key] = val
+    }
+    return 0
+  })
+  return shortInfo
+}
 const PatientDetail = function(props){
   const {setSuccessMessage, setBackdropState} = useUIHelper()
   const {userInfo, currentUser} = useAuth()
@@ -37,22 +47,31 @@ const PatientDetail = function(props){
     setBackdropState(true)
     newSessionVal['user'] = currentUser.phoneNumber
     const latestSession = getLatestSession(patientDetail)
+    // remove undefined value
+    Object.keys(shortInfo).map((key) => {
+      if(shortInfo[key] === undefined) delete shortInfo[key]
+      return 0
+    })
+    Object.keys(newSessionVal).map((key) => {
+      if(newSessionVal[key] === undefined) delete newSessionVal[key]
+      return 0
+    })
     // status-changed logic
     const updates = {}
     if(latestSession.status === 'waiting'){
       // delete from waiting list
       updates['/waiting/'+latestSession.nc+"/"+patientKey] = null
     }
-    if(newSessionInfo.visting === true){
+    if(newSessionVal.visiting === true){
       newSessionVal.status = 'processing'
       // add to processing list
       updates['/processing/'+shortInfo.nc+"/"+patientKey] = shortInfo
-    }
-    else{
+    } else {
       newSessionVal.status = 'done'
       // delete from processing list
       updates['/processing/'+latestSession.nc+"/"+patientKey] = null
     }
+    delete newSessionVal.visiting
     // nc-changed logic
     if(newSessionInfo.nc !== latestSession.nc){
       // delete from "/nc[old]"
@@ -77,8 +96,8 @@ const PatientDetail = function(props){
     })
     // set new session
     updates['/patients/'+patientKey+'/history/'+session_key] = JSON.parse(JSON.stringify(newSessionVal))
-    console.log(updates)
-    // update(ref(db), updates)
+    
+    update(ref(db), updates)
     setBackdropState(false)
     setNewSessionDialog(false)
     setNewSessionInfo({nc: latestSession.nc})
@@ -107,6 +126,20 @@ const PatientDetail = function(props){
       <PatientBriefInfo className="pt16" item={patientDetail} age={age} clipboardHandler={() => {
         navigator.clipboard.writeText(patientDetail.phone);
         setSuccessMessage('Đã copy!')
+      }} favourite={{
+        following: isNil(patientDetail.followers) || Object.keys(patientDetail.followers).indexOf(currentUser.phoneNumber) === -1?false:true,
+        follow: function(){
+          const updates = {}
+          updates['/patients/'+patientKey+'/followers/'+currentUser.phoneNumber] = true
+          updates['/users/'+currentUser.phoneNumber+'/patients/'+patientKey] = getShortInfo(patientDetail)
+          update(ref(db),updates)
+        },
+        unfollow: function(){
+          const updates = {}
+          updates['/patients/'+patientKey+'/followers/'+currentUser.phoneNumber] = null
+          updates['/users/'+currentUser.phoneNumber+'/patients/'+patientKey] = null
+          update(ref(db),updates)
+        }
       }} />
       <Box>
         {Object.keys(patientDetail.history).map((timestamp,idx) => {
@@ -120,17 +153,22 @@ const PatientDetail = function(props){
         })}
       </Box>
       <Box className="control">
+        <IconButton color="secondary" variant="outlined" onClick={() => props.history.goBack()}>
+          <ArrowBack />
+        </IconButton>
         {userInfo !== undefined?
-          <Button variant="contained" color="primary" onClick={() => setNewSessionDialog(true)}>Thêm kết quả chăm sóc</Button>
+          <Button variant="contained" color="primary" onClick={() => setNewSessionDialog(true)}
+          startIcon={<Add />}>
+            Phiên chăm sóc
+          </Button>
         :null}
-        <Button variant="outlined" color="secondary" onClick={() => props.history.goBack()}>Quay lại</Button>
       </Box>
       <Drawer anchor={'bottom'} open={newSessionDialog} onClose={() => setNewSessionDialog(false)}>
         {!isNil(userInfo) && userInfo.type === 'icu-doctor'?
           <ICUDoctor.Question initialState={newSessionInfo} onItemValueChange={(newKeyValue) => {
               setNewSessionInfo({...newSessionInfo, ...newKeyValue})
             }}
-            patientInfoKey={patientInfoKey} patientDetail={patientDetail}
+            shortInfoKey={shortInfoKey} patientDetail={patientDetail}
             saveHandler={saveHandler} onClose={() => setNewSessionDialog(false)}
           />:null
         }
@@ -138,7 +176,7 @@ const PatientDetail = function(props){
           <MedicalStaff.Question initialState={newSessionInfo} onItemValueChange={(newKeyValue) => {
               setNewSessionInfo({...newSessionInfo, ...newKeyValue})
             }}
-            patientInfoKey={patientInfoKey} patientDetail={patientDetail}
+            shortInfoKey={shortInfoKey} patientDetail={patientDetail}
             saveHandler={saveHandler} onClose={() => setNewSessionDialog(false)}
           />:null
         }

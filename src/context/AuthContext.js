@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { auth } from '../firebase';
 import {onAuthStateChanged,signOut} from 'firebase/auth';
-import { getDatabase, ref, get ,child} from "firebase/database";
+import { getDatabase, ref, onValue} from "firebase/database";
 import { useUIHelper } from "./UIHelperContext";
 import Routing from "../config/Routing";
 import { useHistory } from "react-router";
@@ -30,10 +30,11 @@ export function AuthProvider({children}) {
       setCurrentUser(remoteUser)
       if(remoteUser !== null){
         const {phoneNumber} = remoteUser
-        get(child(ref(db),'users/' + phoneNumber)).then((snapshot) => {
+        const remoteUserInfo = ref(db, 'users/' + phoneNumber);
+        onValue(remoteUserInfo, (snapshot) => {
           const data = snapshot.val();
           setUserInfo(data)
-        }) ;
+        });
       }else{
         history.push(Routing.LOGIN)
       }

@@ -7,7 +7,7 @@ import Routing from "../config/Routing";
 import { useHistory } from "react-router";
 import { isNil } from "lodash";
 import { makeStyles } from '@material-ui/core/styles';
-import { AssignmentInd, LocalHospital, People, PostAdd, PowerSettingsNew } from "@material-ui/icons";
+import { Favorite, LocalHospital, People, PostAdd, PowerSettingsNew } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   profileItemStyle: {
@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 
 const listItems = [
   {label: 'Thu thập thông tin', pathname: Routing.PATIENTINFO, icon: <PostAdd />},
-  {label: 'Hồ sơ bệnh nhân', pathname: Routing.PATIENTBOOK, icon: <AssignmentInd /> },
+  {label: 'Bệnh nhân của tôi', pathname: Routing.PATIENTBOOK, icon: <Favorite /> },
   {label: 'Theo dõi bệnh nhân nặng', pathname: Routing.ICU, user_type: ['icu-doctor','admin'], icon: <LocalHospital />},
   {label: 'Quản trị user', pathname: Routing.USER, icon: <People />, user_type: ['admin'] },
 ]

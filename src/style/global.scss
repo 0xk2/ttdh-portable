@@ -43,10 +43,14 @@
   justify-content: space-between;
 }
 
-.icu-card-name{
+.patient-card-name{
   display: flex;
-  h2 {
-    margin-right: 10px;
+  justify-content: space-between;
+  .col-left{
+    display: flex;
+    h2 {
+      margin-right: 10px;
+    }
   }
 }
 
