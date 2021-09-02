@@ -12,6 +12,8 @@ import {useAuth} from '../context/AuthContext'
 import { getDatabase, ref, update } from "@firebase/database";
 import { getAnalytics, logEvent } from '@firebase/analytics';
 
+// TODO: open this page and save
+
 const db = getDatabase()
 
 const Result = (props) => {

@@ -55,16 +55,16 @@ const sample = {
       "expertise": "Bác Sỹ",
       "region":"Quận 3",
       "patients": {
-        "098723405-123273494": true,    
-        "098723405-123273495": true,
+        "098723405-123273494": {"phone":"0915585266", "name":"Hieu", "nc":3, "latestSessionTimestamp":1234},
+        "098723405-123273495": {"phone":"0915585266", "name":"Hieu", "nc":3, "latestSessionTimestamp":1235},
       }
     }
   },
   "nc0":{
-    "098723405-123273494": {"phone":"0915585266", "name":"Hieu"}
+    "098723405-123273494": {"phone":"0915585266", "name":"Hieu", "latestSessionTimestamp":1234}
   },
   "nc1":{
-    "098723405-123273494": {"phone":"0915585266", "name":"Hieu"}
+    "098723405-123273494": {"phone":"0915585266", "name":"Hieu", "latestSessionTimestamp":1235}
   },
   "nc2":{
     "098723405-123273494": {"phone":"0915585266", "name":"Hieu"}

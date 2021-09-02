@@ -27,7 +27,6 @@ export function UIHelperProvider ({children}){
     setSuccessMessage,
     setBackdropState
   }
-  console.log('uihelper.backdropState :' ,backdropState)
   return (
     <UIHelperContext.Provider value={value}>
       {children}

@@ -39,7 +39,7 @@ export function AuthProvider({children}) {
       }
     });
     return unsubcribe;
-  },[history])
+  },[history, setBackdropState])
   const value = {
     currentUser,
     userInfo,

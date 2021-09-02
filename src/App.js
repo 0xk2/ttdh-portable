@@ -14,7 +14,7 @@ import Routing from './config/Routing';
 import { AuthProvider } from './context/AuthContext';
 import { UIHelperProvider } from './context/UIHelperContext';
 import ICU from './page/ICU';
-import PatientDetail from './page/PatientDetail';
+import PatientDetail from './page/PatientDetail/PatientDetail';
 import AppbarLayoutRoute from './layout/AppbarLayoutRoute';
 import { User } from './page/User';
 
@@ -32,7 +32,6 @@ function App() {
             <AppbarLayoutRoute path={Routing.ICU} component={ICU} exact/>
             <AppbarLayoutRoute path={Routing.PATIENTPROFILE} component={PatientDetail} exact/>
             <AppbarLayoutRoute path={Routing.USER} component={User} exact/>
-            {/* <Route path={Routing.PATIENTPROFILE} render={(props) => <PatientDetail {...props} />} exact /> */}
           </AuthProvider>
         </UIHelperProvider>
       </Switch>

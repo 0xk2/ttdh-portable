@@ -6,7 +6,7 @@ import Routing from "../config/Routing";
 import {SORT} from '../config/Constants';
 import { sortBy } from "lodash";
 
-function PatientList({patients: items, sortBy: sorting}) {
+function PatientList(items, sorting) {
   const history = useHistory()
   const {setSuccessMessage} = useUIHelper()
   //put key inside object before sorting
@@ -20,7 +20,6 @@ function PatientList({patients: items, sortBy: sorting}) {
       items = sortBy(items, [function(item) { return item.lastestSessionTimestamp === undefined?0:parseInt(item.lastestSessionTimestamp)*-1 }])
       break;
   }
-  console.log("patientlist: items ",items)
   return (
     <>
     {items.map((item,idx) => {
