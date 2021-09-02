@@ -26,11 +26,11 @@ function PatientBook(props){
   const {setBackdropState} = useUIHelper()
   let originalPatientKeys = userInfo === undefined?{}:userInfo.patients===undefined?{}:userInfo.patients;
   const keys = Object.keys(originalPatientKeys)
-  console.log(keys)
+  console.log("keys.length: ",keys.length)
+  setBackdropState(true)
   useEffect(() => {
     if(keys.length > 0){
       async function fetchPatients(){
-        //setBackdropState(true)
         const obj = {}
         for(var i=0;i<keys.length;i++){
           const key = keys[i]
@@ -44,12 +44,13 @@ function PatientBook(props){
           const lastestTimestamp = Math.max(...timeStamps)
           obj[key] = {...aPatient, nc: aPatient.history[lastestTimestamp+""].nc, "latestTimestamp": lastestTimestamp}
         }
+        console.log(obj)
         setPatients({...obj})
-        //setBackdropState(false)
+        setBackdropState(false)
       }
       fetchPatients()
     }
-  },[])
+  },[keys,setBackdropState])
   
   return (
     <Container maxWidth="md" className="frm-container PatientBook">
@@ -64,7 +65,7 @@ function PatientBook(props){
           <div onClick={() => {sort(sortBy === SORT.LATEST?SORT.OLDEST:SORT.LATEST)}}>{sortBy === SORT.LATEST? <ArrowUpward />:<ArrowDownward />}</div>
         </Box>
       </Box>
-      {PatientList(patients, sortBy)}
+      <PatientList {...{patients, sortBy}} />
     </Container>
   )
 }

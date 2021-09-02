@@ -27,7 +27,7 @@ export function UIHelperProvider ({children}){
     setSuccessMessage,
     setBackdropState
   }
-
+  console.log('uihelper.backdropState :' ,backdropState)
   return (
     <UIHelperContext.Provider value={value}>
       {children}
@@ -37,7 +37,7 @@ export function UIHelperProvider ({children}){
       <Snackbar open={successMessage !== ''} autoHideDuration={6000} onClose={() => setSuccessMessage('')} anchorOrigin={{ vertical:'top', horizontal:'center'}}>
         <Alert onClose={()=>setSuccessMessage('')} severity="success">{successMessage}</Alert>
       </Snackbar>
-      <Backdrop className={classes.backdrop} open={backdropState} onClick={() => {
+      <Backdrop key={backdropState} className={classes.backdrop} open={backdropState} onClick={() => {
         // setBackdropState(false)
       }}>
         <CircularProgress color="inherit" />
