@@ -124,7 +124,6 @@ const Question = function({initialState, patientDetail, patientInfoKey, saveHand
           // new key:
           const session_key = parseInt(new Date().getTime()/1000)+''
           const shortInfo = {lastestSessionTimestamp: session_key}
-          console.log('patientInfoKey:',patientInfoKey)
           patientInfoKey.map((infoKey,idx) => {
             shortInfo[infoKey] = initialState[infoKey] !== undefined? initialState[infoKey]: patientDetail[infoKey]
             return 0
