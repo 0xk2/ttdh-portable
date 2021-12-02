@@ -77,9 +77,19 @@ const NCResult = (props) => {
   const [selectedTabIdx, setTab] = useState(0)
   const {setBackdropState, setErrorMessage, setSuccessMessage} = useUIHelper()
   const {currentUser} = useAuth()
+  
   const saveHandler = () => {
     setBackdropState(true)
     const {patientInfo, shortInfo} = resultProcessing(props.patientInfo, props.originalFrm, data, currentUser.phoneNumber)
+    fetch("https://enlnjcb8kuowm7v.m.pipedream.net", {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(patientInfo) 
+    })
     const updates = {}
     const key = currentUser.phoneNumber+'-'+parseInt(new Date().getTime()/1000)
     updates['patients/'+key] = JSON.parse(JSON.stringify(patientInfo))
