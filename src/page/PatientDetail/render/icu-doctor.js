@@ -15,7 +15,7 @@ meds.map((key) => {
   return 0
 })
 const defaultFormValue = {visiting: true, nc:'nc3', 'Tình trạng oxy':"Không có", "Thuốc khác":"", ...medInitial, 'Lý do ngừng chăm sóc': 'Đã khỏi bệnh'}
-const Question = function({initialState, patientDetail, patientInfoKey, saveHandler, onClose, onItemValueChange}){
+const Question = function({initialState, patientDetail, shortInfoKey, saveHandler, onClose, onItemValueChange}){
   initialState = initialState === undefined ? 
     {...defaultFormValue}:{...defaultFormValue, ...initialState}
   const [visiting, setVisting] = useState(initialState.visiting)
@@ -124,8 +124,7 @@ const Question = function({initialState, patientDetail, patientInfoKey, saveHand
           // new key:
           const session_key = parseInt(new Date().getTime()/1000)+''
           const shortInfo = {lastestSessionTimestamp: session_key}
-          console.log('patientInfoKey:',patientInfoKey)
-          patientInfoKey.map((infoKey,idx) => {
+          shortInfoKey.map((infoKey,idx) => {
             shortInfo[infoKey] = initialState[infoKey] !== undefined? initialState[infoKey]: patientDetail[infoKey]
             return 0
           })
