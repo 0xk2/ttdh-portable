@@ -10,8 +10,10 @@ import { useUIHelper } from "../context/UIHelperContext"
 const db = getDatabase()
 
 function ICU(props){
+  const [waitingNC2, setWaitingNC2] = useState({})
   const [waitingNC3, setWaitingNC3] = useState({})
   const [waitingNC4, setWaitingNC4] = useState({})
+  const [processingNC2, setProcessingNC2] = useState({})
   const [processingNC3, setProcessingNC3] = useState({})
   const [processingNC4, setProcessingNC4] = useState({})
   const {setBackdropState} = useUIHelper()
@@ -20,8 +22,19 @@ function ICU(props){
     processing: SORT.OLDEST
   })
   const [selectedTabIdx, setTab] = useState(0)
-  const lblWaiting = "Chưa chăm sóc (" + (Object.keys(waitingNC3).length + Object.keys(waitingNC4).length) + ")"
-  const lblProcessing = "Đang chăm sóc ("+ (Object.keys(processingNC3).length + Object.keys(processingNC4).length) +")"
+  const lblWaiting = "Chưa chăm sóc (" + (Object.keys(waitingNC2).length + Object.keys(waitingNC3).length + Object.keys(waitingNC4).length) + ")"
+  const lblProcessing = "Đang chăm sóc ("+ (Object.keys(processingNC2).length + Object.keys(processingNC3).length + Object.keys(processingNC4).length) +")"
+  useEffect(() => {
+    setBackdropState(true)
+    return onValue(ref(db, '/waiting/nc2'), (snapshot) => {
+      setBackdropState(false)
+      if(snapshot.val() === null){
+        setWaitingNC2({})
+      }else{
+        setWaitingNC2(snapshot.val())
+      }
+    })
+  },[setBackdropState])
   useEffect(() => {
     setBackdropState(true)
     return onValue(ref(db, '/waiting/nc3'), (snapshot) => {
@@ -41,6 +54,17 @@ function ICU(props){
         setWaitingNC4({})
       }else{
         setWaitingNC4(snapshot.val())
+      }
+    })
+  },[setBackdropState])
+  useEffect(() => {
+    setBackdropState(true)
+    return onValue(ref(db, '/processing/nc2'), (snapshot) => {
+      setBackdropState(false)
+      if(snapshot.val() === null){
+        setProcessingNC2({})
+      }else{
+        setProcessingNC2(snapshot.val())
       }
     })
   },[setBackdropState])
@@ -66,8 +90,8 @@ function ICU(props){
       }
     })
   },[setBackdropState])
-  const waiting = {...waitingNC3, ...waitingNC4}
-  const processing = {...processingNC3, ...processingNC4}
+  const waiting = {...waitingNC2, ...waitingNC3, ...waitingNC4}
+  const processing = {...processingNC2, ...processingNC3, ...processingNC4}
   return (
     <Container maxWidth="md" className="frm-container icu">
       <Box className="title pt16">Bệnh nhân nặng</Box>
@@ -84,7 +108,7 @@ function ICU(props){
       </Tabs>
       <TabPanel index={0} value={selectedTabIdx} className="tab-holder">
         <Box className="controller">
-          <Box className="nc-counter">NC3: {Object.keys(waitingNC3).length}, NC4: {Object.keys(waitingNC4).length}</Box>
+          <Box className="nc-counter">NC2: {Object.keys(waitingNC2).length}, NC3: {Object.keys(waitingNC3).length}, NC4: {Object.keys(waitingNC4).length}</Box>
           <Box>
             <div onClick={() => {sort({...sortBy, waiting: sortBy.waiting === SORT.LATEST?SORT.OLDEST:SORT.LATEST})}}>{sortBy.waiting === SORT.LATEST? <ArrowUpward />:<ArrowDownward />}</div>
           </Box>
@@ -93,7 +117,7 @@ function ICU(props){
       </TabPanel>
       <TabPanel index={1} value={selectedTabIdx} className="tab-holder">
         <Box className="controller">
-          <Box className="nc-counter">NC3: {Object.keys(processingNC3).length}, NC4: {Object.keys(processingNC4).length}</Box>
+          <Box className="nc-counter">NC2: {Object.keys(processingNC2).length}, NC3: {Object.keys(processingNC3).length}, NC4: {Object.keys(processingNC4).length}</Box>
           <Box>
             <div onClick={() => {sort({...sortBy, processing: sortBy.processing === SORT.LATEST?SORT.OLDEST:SORT.LATEST})}}>{sortBy.processing === SORT.LATEST? <ArrowUpward />:<ArrowDownward />}</div>
           </Box>
